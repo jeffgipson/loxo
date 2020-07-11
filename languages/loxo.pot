@@ -1,0 +1,331 @@
+# Copyright (C) 2020 Loxo
+# This file is distributed under the same license as the Loxo plugin.
+msgid ""
+msgstr ""
+"Project-Id-Version: Loxo 1.0.2\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/loxo\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2020-07-06T22:30:17+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.4.0\n"
+"X-Domain: loxo\n"
+
+#. Plugin Name of the plugin
+#. Author of the plugin
+msgid "Loxo"
+msgstr ""
+
+#. Plugin URI of the plugin
+msgid "https://www.ramaxsearch.com"
+msgstr ""
+
+#. Description of the plugin
+msgid "OptimizeForm modules manager."
+msgstr ""
+
+#. Author URI of the plugin
+msgid "https://shazzad.me"
+msgstr ""
+
+#: includes/Admin/Ajax_Handlers.php:37
+#: includes/Admin/Ajax_Handlers.php:63
+#: includes/Admin/Ajax_Handlers.php:113
+msgid "Unauthorized request."
+msgstr ""
+
+#: includes/Admin/Ajax_Handlers.php:45
+#: includes/Admin/Ajax_Handlers.php:71
+#: includes/Admin/Ajax_Handlers.php:121
+msgid "Invalid request."
+msgstr ""
+
+#: includes/Admin/Ajax_Handlers.php:79
+#: includes/Admin/Ajax_Handlers.php:130
+msgid "Validation failed"
+msgstr ""
+
+#: includes/Admin/Ajax_Handlers.php:87
+#: includes/Admin/Ajax_Handlers.php:139
+msgid "Could not locate plugin file"
+msgstr ""
+
+#: includes/Admin/Ajax_Handlers.php:101
+msgid "Module activated"
+msgstr ""
+
+#: includes/Admin/Ajax_Handlers.php:153
+msgid "Module deactivated"
+msgstr ""
+
+#: includes/Admin/Main.php:44
+msgid "Settings"
+msgstr ""
+
+#: includes/Admin/Page/Settings.php:36
+#: includes/Admin/Page/Settings.php:37
+#: includes/Admin/Page/Settings.php:190
+msgid "Loxo Settings"
+msgstr ""
+
+#: includes/Admin/Page/Settings.php:77
+msgid "API Settings"
+msgstr ""
+
+#: includes/Admin/Page/Settings.php:81
+msgid "General Settings"
+msgstr ""
+
+#: includes/Admin/Page/Settings.php:85
+msgid "SEO Settings"
+msgstr ""
+
+#: includes/Admin/Page/Settings.php:97
+msgid "API Username"
+msgstr ""
+
+#: includes/Admin/Page/Settings.php:98
+#: includes/Admin/Page/Settings.php:106
+#: includes/Admin/Page/Settings.php:114
+msgid "Contact loxo support to get this information."
+msgstr ""
+
+#: includes/Admin/Page/Settings.php:105
+msgid "API Password"
+msgstr ""
+
+#: includes/Admin/Page/Settings.php:113
+msgid "Agency Key"
+msgstr ""
+
+#: includes/Admin/Page/Settings.php:123
+msgid "Listing Page"
+msgstr ""
+
+#: includes/Admin/Page/Settings.php:124
+msgid "Job listing will be automatically displayed on this page. Also, single job pages will be generated using this page url."
+msgstr ""
+
+#: includes/Admin/Page/Settings.php:132
+msgid "Hiring Company Name"
+msgstr ""
+
+#: includes/Admin/Page/Settings.php:133
+msgid "Used on single job company name schema."
+msgstr ""
+
+#: includes/Admin/Page/Settings.php:141
+msgid "Hiring Company Url"
+msgstr ""
+
+#: includes/Admin/Page/Settings.php:142
+msgid "Used on single job company sameAs schema."
+msgstr ""
+
+#: includes/Admin/Page/Settings.php:150
+msgid "Hiring Company Logo"
+msgstr ""
+
+#: includes/Admin/Page/Settings.php:151
+msgid "Used on single job company logo schema."
+msgstr ""
+
+#: includes/Admin/Page/Settings.php:158
+msgid "Enable Jobs Sitemap?"
+msgstr ""
+
+#: includes/Admin/Page/Settings.php:159
+msgid "If enabled, a sitemap will be created for your jobs"
+msgstr ""
+
+#: includes/Admin/Page/Settings.php:194
+msgid ""
+"Loxo api jobs requests are cached with one minute interval,\r\n"
+"\t\t\t\t\t\tsingle job data are cached with 5 minutes interval.\r\n"
+"\t\t\t\t\t\tReset cache to see fresh content if needed."
+msgstr ""
+
+#: includes/Admin/Page/Settings.php:204
+msgid "Clear Cache"
+msgstr ""
+
+#: includes/Admin/Page/Settings.php:209
+msgid "A sitemap is automatically generated for all active jobs. It is also added on the robots.txt file so that search engine both can find it. Click view sitemap to see how it looks."
+msgstr ""
+
+#: includes/Admin/Page/Settings.php:211
+msgid "If you have added or deactivated job on loxo, resubmit sitemap to google for reindexing."
+msgstr ""
+
+#: includes/Admin/Page/Settings.php:212
+msgid "Submit Sitemap to Google"
+msgstr ""
+
+#: includes/Admin/Page/views/license-form.php:5
+msgid "License Key"
+msgstr ""
+
+#: includes/Admin/Page/views/license-form.php:9
+msgid "Update License"
+msgstr ""
+
+#: includes/Admin/Page/views/license-form.php:10
+msgid "Deactivate License"
+msgstr ""
+
+#. translators: %s: Api error string.
+#: includes/Frontend.php:134
+#: includes/Frontend.php:149
+msgid "Error: %s"
+msgstr ""
+
+#: includes/Frontend.php:171
+msgid "Cheating huh?"
+msgstr ""
+
+#: includes/Frontend.php:175
+msgid "Cheating hard?"
+msgstr ""
+
+#: includes/Frontend.php:179
+msgid "Please complete all fields, and submit again."
+msgstr ""
+
+#: includes/functions.php:382
+msgid "Could not connect to loxo. Missing api credentials."
+msgstr ""
+
+#: includes/functions.php:436
+msgid "Could not retrive jobs. Missing api credentials."
+msgstr ""
+
+#. translators: %s: SimpleXML
+#: includes/Sitemap.php:201
+msgid "Could not generate XML sitemap due to missing %s extension"
+msgstr ""
+
+#: includes/Sitemap.php:204
+msgid "WordPress &rsaquo; Error"
+msgstr ""
+
+#: includes/Sitemap.php:217
+msgid "XML Sitemap"
+msgstr ""
+
+#: includes/Sitemap.php:218
+msgid "This XML Sitemap is generated by Loxo Plugin to make jobs visible for search engines."
+msgstr ""
+
+#: includes/Sitemap.php:221
+msgid "https://www.sitemaps.org/"
+msgstr ""
+
+#: includes/Sitemap.php:222
+msgid "Learn more about XML sitemaps."
+msgstr ""
+
+#. translators: %s: number of URLs.
+#: includes/Sitemap.php:227
+msgid "Number of URLs in this XML Sitemap: %s."
+msgstr ""
+
+#: includes/Sitemap.php:232
+msgid "URL"
+msgstr ""
+
+#: includes/Sitemap.php:233
+msgid "Last Modified"
+msgstr ""
+
+#: includes/Sitemap.php:234
+msgid "Change Frequency"
+msgstr ""
+
+#: includes/Sitemap.php:235
+msgid "Priority"
+msgstr ""
+
+#: templates/listing-content.php:9
+msgid "Category"
+msgstr ""
+
+#: templates/listing-content.php:28
+#: templates/single-job-content.php:23
+msgid "Type"
+msgstr ""
+
+#: templates/listing-content.php:47
+msgid "City"
+msgstr ""
+
+#: templates/listing-content.php:65
+msgid "Reset"
+msgstr ""
+
+#: templates/single-job-content.php:8
+msgid "Back to Jobs"
+msgstr ""
+
+#: templates/single-job-content.php:19
+msgid "Compensation"
+msgstr ""
+
+#: templates/single-job-content.php:34
+msgid "Location"
+msgstr ""
+
+#: templates/single-job-content.php:50
+msgid "Share on Facebook"
+msgstr ""
+
+#: templates/single-job-content.php:55
+msgid "Share on Twitter"
+msgstr ""
+
+#: templates/single-job-content.php:60
+msgid "Share on LinkedIn"
+msgstr ""
+
+#: templates/single-job-content.php:65
+msgid "Share by Email"
+msgstr ""
+
+#: templates/single-job-content.php:76
+msgid "Congratulations!!!"
+msgstr ""
+
+#: templates/single-job-content.php:77
+msgid "You have successfully applied for this job."
+msgstr ""
+
+#: templates/single-job-content.php:84
+msgid "Job Closed."
+msgstr ""
+
+#: templates/single-job-content.php:93
+msgid "Could not apply for job. Please fix the error before resubmitting."
+msgstr ""
+
+#: templates/single-job-content.php:105
+#: templates/single-job-content.php:131
+msgid "Apply"
+msgstr ""
+
+#: templates/single-job-content.php:107
+msgid "Name:"
+msgstr ""
+
+#: templates/single-job-content.php:113
+msgid "Email:"
+msgstr ""
+
+#: templates/single-job-content.php:119
+msgid "Phone:"
+msgstr ""
+
+#: templates/single-job-content.php:125
+msgid "Resume:"
+msgstr ""

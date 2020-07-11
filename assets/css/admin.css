@@ -1,0 +1,21 @@
+/* General */
+.wrap h1{
+	margin-bottom: 1rem;
+}
+.loxo-sidebar{
+	margin-bottom: 30px;
+	padding: 10px 20px;
+	background-color: #fff;
+}
+
+@media (min-width: 961px) {
+	.loxo-sidebar{
+		padding: 10px 20px;
+		float: right;
+		width: 260px;
+		background-color: #fff;
+	}
+	.loxo-form{
+		overflow: hidden;
+	}
+}

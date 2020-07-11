@@ -1,0 +1,198 @@
+/* Form */
+.loxo-form{
+	border-radius: 5px;
+	padding: 20px 30px;
+	border: 1px solid #ddd;
+}
+.loxo-form .field-row{
+	margin-bottom: 15px;
+}
+.loxo-form .field-row:last-child{
+	margin-bottom: 0;
+}
+.loxo-form .field-label{
+	font-weight: bold;
+}
+.loxo-form .field-control{
+	padding: 10px;
+	border: 1px solid #DDD;
+}
+
+/* Alert */
+.loxo-alert{
+	padding: 30px;
+	margin: 10px 0;
+	text-align:center;
+	border: 2px solid #4396e6;
+}
+.loxo-alert .alert-icon{
+	font-size: 50px;
+}
+.loxo-alert .alert-icon,
+.loxo-alert .alert-heading{
+	color: #4396e6;
+}
+.loxo-alert .alert-heading{
+	font-size: 1.5rem;
+}
+.loxo-alert .alert-message{
+	color: #000;
+}
+.loxo-alert-error{
+	border-color: #FF0000;
+}
+.loxo-alert-error .alert-icon,
+.loxo-alert-error .alert-heading{
+	color: #FF0000;
+}
+.loxo-alert .alert-error{
+	color: #FF0000;
+}
+
+/* Listing */
+.loxo-jobs-listing{
+	display: flex;
+	flex-wrap: nowrap;
+	grid-gap: 20px;
+}
+.loxo-jobs-filters{
+	flex: 0 0 300px;
+}
+.loxo-jobs{
+	flex: 1 1 auto;
+}
+.loxo-jobs .loxo-job{
+	display: block;
+}
+.loxo-jobs .job-inner{
+	padding: 20px;
+	transition: all .3s ease-in-out;
+	background-color: #FFF;
+	border-bottom: 4px solid #4396e6;
+}
+.loxo-jobs .loxo-job:hover .job-inner{
+	background-color: #F8F8F8;
+}
+.loxo-jobs .job-title{
+	margin: 0;
+}
+.loxo-jobs .job-data{
+	color: #999;
+}
+.loxo-jobs .no-jobs{
+	color: red;
+	display: none;
+}
+.loxo-jobs .job-meta > span{
+	color: #333;
+	font-size: 14px;
+	padding: 5px 6px;
+	line-height: 14px;
+	border-radius: 3px;
+	border: 1px solid #ddd;
+}
+
+/* Single Job */
+.loxo-single-job h3{
+	margin-top: 3rem;
+}
+.loxo-single-job .job-meta dt{
+	float: left;
+	margin-right: 10px;
+	min-width: 100px;
+}
+.loxo-single-job .job-meta dd{
+	display: block;
+}
+.job-description{
+	flex: 1 1 auto;
+}
+
+/* Job Application */
+.loxo-job-applied{
+	margin-top:50px;
+}
+.loxo-job-apply-form{
+	margin: 20px 0;
+}
+.loxo-job-apply-form h4{
+	text-align: center;
+}
+.loxo-job-share-icons{
+	margin: 20px 0;
+}
+.loxo-job-share-icons a{
+	width: 50px;
+	padding: 10px;
+	margin: 0 5px;
+	font-size: 24px;
+	line-height: 24px;
+	text-align: center;
+	display: inline-block;
+	border: 2px solid #4396e6;
+}
+
+/* Responsive */
+@media (min-width: 768px) {
+}
+@media (min-width: 992px) {
+	.loxo-jobs .job-inner{
+		display: flex;
+		flex-wrap: nowrap;
+		align-items: center;
+		justify-content: space-between;
+	}
+	.loxo-jobs .job-meta{
+		display: flex;
+		grid-gap: 5px;
+		flex-wrap: nowrap;
+		align-items: center;
+		justify-content: flex-start;
+	}
+	.loxo-jobs .job-meta > span{
+		flex: 0 0 auto;
+	}
+
+	.loxo-single-job .job-content{
+		display: flex;
+		flex-wrap: nowrap;
+		grid-gap: 20px;
+	}
+	.loxo-job-share-icons{
+		text-align: center;
+	}
+	.job-apply{
+		flex: 0 0 300px;
+	}
+}
+
+
+@media (max-width: 991px) {
+	.loxo-jobs-filters{
+		flex: 0 0 240px;
+	}
+	.loxo-form {
+		padding: 15px 20px;
+	}
+	.loxo-jobs .job-meta{
+		margin-top: 10px;
+	}
+	.loxo-jobs .job-meta span{
+		margin: 0 5px 5px 0;
+	}
+
+	.loxo-single-job .job-apply{
+		margin-top: 30px;
+	}
+}
+@media (max-width: 767px) {
+	.loxo-jobs-listing{
+		display: block;
+	}
+	.loxo-jobs-filters{
+		flex: none;
+	}
+	.loxo-jobs{
+		margin-top: 20px;
+	}
+}

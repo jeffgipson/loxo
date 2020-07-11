@@ -1,0 +1,19 @@
+{
+  "name": "shazzad/loxo",
+  "description": "Loxo recruitment integration for wordpress.",
+  "type": "wordpress-plugin",
+  "license": "GPL-2.0+",
+  "authors": [
+    {
+      "name": "Shazzad Hossain Khan",
+      "email": "hello@shazzad.me"
+    }
+  ],
+  "minimum-stability": "dev",
+  "autoload": {
+    "psr-4": {
+      "Loxo\\": "includes/"
+    },
+    "files": [ "includes/functions.php" ]
+  }
+}
