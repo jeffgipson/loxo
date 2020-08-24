@@ -23,37 +23,18 @@
 					</div>
 				</div>
 			<?php endif; ?>
-			<?php if ( ! is_wp_error( $job_types ) ) : ?>
+			<?php if ( ! is_wp_error( $job_states ) ) : ?>
 			<div class="field-row">
-				<label class="field-label"><?php _e( 'Type', 'loxo' ); ?></label>
+				<label class="field-label"><?php _e( 'State', 'loxo' ); ?></label>
 				<div class="control-wrap">
-					<select class="field-control" id="loxo-job-type">
-						<?php
-						foreach ( $job_types as $job_type ) {
-							printf(
-								'<option value="%s">%s (%d)</option>',
-								$job_type['id'],
-								$job_type['name'],
-								$job_type['count']
-							);
-						}
-						?>
-					</select>
-				</div>
-			</div>
-			<?php endif; ?>
-			<?php if ( ! is_wp_error( $job_cities ) ) : ?>
-			<div class="field-row">
-				<label class="field-label"><?php _e( 'City', 'loxo' ); ?></label>
-				<div class="control-wrap">
-					<select class="field-control" id="loxo-job-city">
+					<select class="field-control" id="loxo-job-state">
 					<?php
-					foreach ( $job_cities as $job_city ) {
+					foreach ( $job_states as $job_state ) {
 						printf(
 							'<option value="%s">%s (%d)</option>',
-							$job_city['id'],
-							$job_city['name'],
-							$job_city['count']
+							$job_state['id'],
+							$job_state['name'],
+							$job_state['count']
 						);
 					}
 					?>

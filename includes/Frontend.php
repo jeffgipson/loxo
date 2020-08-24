@@ -29,8 +29,8 @@ class Frontend {
 	 * Register admin assets.
 	 */
 	public function register_scripts() {
-		wp_register_style( 'loxo-front', LOXO_URL . 'assets/css/front-3.css' );
-		wp_register_script( 'loxo-front', LOXO_URL . 'assets/js/front-3.js', array( 'jquery' ) );
+		wp_register_style( 'loxo-front', LOXO_URL . 'assets/css/front.css' );
+		wp_register_script( 'loxo-front', LOXO_URL . 'assets/js/front.js', array( 'jquery' ) );
 	}
 
 	/**
@@ -151,8 +151,7 @@ class Frontend {
 				);
 			} else {
 				$job_categories = loxo_get_job_categories();
-				$job_types = loxo_get_job_types();
-				$job_cities = loxo_api_job_cities();
+				$job_states = loxo_api_job_states();
 
 				ob_start();
 				include LOXO_DIR . '/templates/listing-content.php';

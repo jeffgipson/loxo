@@ -1,13 +1,12 @@
 <?php
 /**
  * Plugin Name: Loxo
- * Plugin URI: https://www.ramaxsearch.com
+ * Plugin URI: http://linkpas.com/
  * Description: Display jobs from your loxo.co saas application. job listing, job filter, single job details, sitemap, job schema
- * Version: 1.0.3
- * Author: Loxo
+ * Version: 1.0.4
+ * Author: Shazzad Hossain Khan
  * Author URI: https://shazzad.me
- * Requires at least: 4.4
- * Tested up to: 5.4.1
+ * Requires at least: 5.0
  * Text Domain: loxo
  * Domain Path: /languages
  *
@@ -46,6 +45,9 @@ function loxo() {
 	return \Loxo\Plugin::get_instance();
 }
 
+/**
+ * Store a settings on plugin activation to rewrite rewrite rules on init hook.
+ */
 function loxo_activate() {
 	update_option( 'loxo_flush_rewrite_rules', time() );
 }
