@@ -153,6 +153,17 @@ class Frontend {
 				$job_categories = loxo_get_job_categories();
 				$job_states = loxo_api_job_states();
 
+				$selected_job_category = 'any';
+				if ( isset( $_REQUEST['job_category'] ) ) {
+					$category_name = $_REQUEST['job_category'];
+					foreach ( $job_categories as $job_category ) {
+						if ( $job_category['name'] === $category_name ) {
+							$selected_job_category = $job_category['id'];
+							break;
+						}
+					}
+				}
+
 				ob_start();
 				include LOXO_DIR . '/templates/listing-content.php';
 				$content .= ob_get_clean();

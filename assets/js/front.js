@@ -76,5 +76,7 @@
       selectedState = $(this).val();
       onChangeFilter();
     });
+
+    $('#loxo-job-category').trigger('change');
   });
 })(jQuery);

@@ -12,8 +12,9 @@
 							<?php
 							foreach ( $job_categories as $job_category ) {
 								printf(
-									'<option value="%s">%s (%d)</option>',
+									'<option value="%1$s"%2$s>%3$s (%4$d)</option>',
 									$job_category['id'],
+									$selected_job_category === $job_category['id'] ? ' selected="selected"' : '',
 									$job_category['name'],
 									$job_category['count']
 								);
