@@ -350,6 +350,56 @@ function loxo_api_job_cities() {
 }
 
 
+
+/**
+ * Get job states.
+ *
+ * @return array Array of job statuses.
+ */
+function loxo_api_job_states() {
+	$all_jobs = loxo_get_all_jobs();
+	if ( is_wp_error( $all_jobs ) ) {
+		return array();
+	}
+
+	$states = array(
+		'any' => array(
+			'id' => 'any',
+			'name' => 'Any',
+			'count' => count( $all_jobs )
+		)
+	);
+	$others_count = 0;
+
+	foreach ( $all_jobs as $job ) {
+		if ( empty( $job['state_code'] ) ) {
+			++ $others_count;
+			continue;
+		}
+
+		if ( ! array_key_exists( $job['state_code'], $states ) ) {
+			$states[ $job['state_code'] ] = array(
+				'id' => $job['state_code'],
+				'name' => $job['state_code'],
+				'count' => 1
+			);
+		} else {
+			++ $states[ $job['state_code'] ]['count'];
+		}
+	}
+
+	if ( $others_count > 0 ) {
+		$states[] = array(
+			'id' => 'others',
+			'name' => 'Others',
+			'count' => $others_count
+		);
+	}
+
+	return array_values( $states );
+}
+
+
 /**
  * Get job
  *

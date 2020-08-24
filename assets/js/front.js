@@ -2,8 +2,7 @@
   $(document).ready(function(){
     var $form = $('#loxo-jobs-filter-form'),
         selectedCategory = 'any',
-        selectedType = 'any',
-        selectedCity = 'any';
+        selectedState = 'any';
 
     $form.on('submit', function(){
       return false;
@@ -21,22 +20,12 @@
         }
 
         if (matched) {
-          if ('any' === selectedType) {
+          if ('any' === selectedState) {
             matched = true;
-          } else if ('others' === selectedType) {
-            matched = ! job.job_type;
+          } else if ('others' === selectedState) {
+            matched = ! job.state_code;
           } else {
-            matched = job.job_type && job.job_type.id == selectedType;
-          }
-        }
-
-        if (matched) {
-          if ('any' === selectedCity) {
-            matched = true;
-          } else if ('others' === selectedCity) {
-            matched = ! job.city;
-          } else {
-            matched = job.city && job.city == selectedCity;
+            matched = job.state_code && job.state_code == selectedState;
           }
         }
 
@@ -68,12 +57,10 @@
 
     $form.on('click', '.reset-button', function(){
       selectedCategory = 'any',
-      selectedType = 'any',
-      selectedCity = 'any';
+      selectedState = 'any';
 
       $('#loxo-job-category').val(selectedCategory);
-      $('#loxo-job-type').val(selectedType);
-      $('#loxo-job-city').val(selectedCity);
+      $('#loxo-job-state').val(selectedState);
 
       onChangeFilter();
 
@@ -85,13 +72,8 @@
       onChangeFilter();
     });
 
-    $form.on('change', '#loxo-job-type', function(){
-      selectedType = $(this).val();
-      onChangeFilter();
-    });
-
-    $form.on('change', '#loxo-job-city', function(){
-      selectedCity = $(this).val();
+    $form.on('change', '#loxo-job-state', function(){
+      selectedState = $(this).val();
       onChangeFilter();
     });
   });
