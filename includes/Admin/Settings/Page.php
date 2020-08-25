@@ -228,8 +228,9 @@ class Page {
                     'sanitize_callback' => 'sanitize_text_field'
                 )
             )
-        );
+		);
 
+		/*
 		$job_statuses = loxo_api_get_job_statuses();
 		if ( ! is_wp_error( $job_statuses ) ) {
 			$job_statuses_options = array( '' => __( 'All' ) );
@@ -246,6 +247,7 @@ class Page {
 				'options' => $job_statuses_options
 			);
 		}
+		*/
 
         return $settings_fields;
     }
@@ -288,7 +290,7 @@ class Page {
 						)
 					); ?>"><?php _e( 'Synchronize', 'loxo' ); ?></a>
 					<?php 
-					if ( $timestamp = wp_next_scheduled( 'loxo_synchronize_all_jobs' ) ) {
+					if ( $timestamp = wp_next_scheduled( 'loxo_synchronize_jobs' ) ) {
 						echo '<br /><br /><strong>';
 						printf( __( 'Auto synchronizer will run in %s' ), human_time_diff( $timestamp ) );
 						echo '</strong>';
@@ -308,19 +310,6 @@ class Page {
 							'_wpnonce' => wp_create_nonce( 'loxo_delete_all' )
 						)
 					); ?>"><?php _e( 'Delete All', 'loxo' ); ?></a>
-				</p>
-
-				<p>
-					<?php
-					_e(
-						'All jobs are stored locally for quick access. You can synchronize jobs from loxo to local storage using button below', 'loxo'
-					);
-					?></br/></br/><a class="button button-primary" href="<?php echo add_query_arg(
-						array(
-							'action' => 'synchronize',
-							'_wpnonce' => wp_create_nonce( 'loxo_synchronize' )
-						)
-					); ?>"><?php _e( 'Synchronize', 'loxo' ); ?></a>
 				</p>
 
 				<?php if ( 'yes' === get_option( 'loxo_enable_sitemap' ) ) : ?>
