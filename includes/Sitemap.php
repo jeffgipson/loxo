@@ -102,18 +102,23 @@ class Sitemap {
 			exit;
 		}
 
-		$all_jobs = loxo_get_all_jobs();
+		$job_posts = get_posts( array(
+			'post_type' => 'loxo_job',
+			'post_status' => 'publish',
+			'posts_per_page' => -1
+		));
 
 		// If there's an error with all jobs, bail.
-		if ( is_wp_error( $all_jobs ) ) {
+		if ( empty( $job_posts ) ) {
 			$wp_query->set_404();
 			return;
 		}
 
 		$url_list = array();
-		foreach ( $all_jobs as $job ) {
+		foreach ( $job_posts as $job_post ) {
+			$job = new \Loxo\Job\Data( $job_post->ID );
 			$url_list[] = array(
-				'loc' => loxo_get_job_url( $job['id'], $job['title'] )
+				'loc' => loxo_get_job_url( $job->get_job_id(), $job->get_name() )
 			);
 		}
 
