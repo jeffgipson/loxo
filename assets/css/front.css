@@ -68,10 +68,11 @@
 	padding: 20px;
 	transition: all .3s ease-in-out;
 	background-color: #FFF;
-	border-bottom: 4px solid #33c69a;
+	border: 1px solid #ddd;
+	margin-bottom: 10px;
 }
 .loxo-jobs .loxo-job:hover .job-inner{
-	background-color: #F8F8F8;
+	border-color: #33c69a;
 }
 .loxo-jobs .job-title{
 	margin: 0;
@@ -79,21 +80,28 @@
 	font-size: 22px;
 }
 .loxo-jobs .job-id,
+.loxo-jobs .job-data,
+.loxo-jobs .job-meta > span,
+.loxo-jobs .job-excerpt{
+	font-size: 14px;
+}
+.loxo-jobs .job-id{
+	color: #33c69a;
+}
 .loxo-jobs .job-data{
 	color: #999;
-	font-size: 14px;
-}
-.loxo-jobs .no-jobs{
-	color: red;
-	display: none;
 }
 .loxo-jobs .job-meta > span{
-	color: #333;
-	font-size: 14px;
+	color: #fff;
 	padding: 5px 6px;
 	line-height: 14px;
 	border-radius: 3px;
-	border: 1px solid #ddd;
+	background-color: #33c69a;
+}
+.loxo-jobs .job-excerpt{
+	color: #333;
+	margin-top: 20px;
+	line-height: 1.6;
 }
 
 /* Pagination */
@@ -152,7 +160,7 @@
 @media (min-width: 992px) {
 	.loxo-jobs .job-inner{
 		display: flex;
-		flex-wrap: nowrap;
+		flex-wrap: wrap;
 		align-items: center;
 		justify-content: space-between;
 	}
@@ -165,6 +173,9 @@
 	}
 	.loxo-jobs .job-meta > span{
 		flex: 0 0 auto;
+	}
+	.loxo-jobs .job-excerpt{
+		flex: 1 1 100%;
 	}
 
 	.loxo-single-job .job-content{

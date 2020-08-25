@@ -54,7 +54,8 @@ class Page {
 
 			loxo_clear_all_cache();
 
-			wp_redirect( admin_url( 'edit.php?post_type=loxo_job&page=loxo-settings&cache-cleared=true' ) );
+			$message = urlencode( __( 'Cache cleared.', 'loxo' ) );
+			wp_redirect( admin_url( 'edit.php?post_type=loxo_job&page=loxo-settings&message='. $message ) );
 			exit;
 		}
 
@@ -65,9 +66,15 @@ class Page {
 			}
 
 			$synchronizer = new \Loxo\Synchronizer();
-			$synchronizer->synchronize_jobs();
+			$sync = $synchronizer->synchronize_jobs();
 
-			wp_redirect( admin_url( 'edit.php?post_type=loxo_job&page=loxo-settings&synchronized=true' ) );
+			if ( false === $sync ) {
+				$message = urlencode( __( 'Synchronizion failed.', 'loxo' ) );
+				wp_redirect( admin_url( 'edit.php?post_type=loxo_job&page=loxo-settings&error=' . $message ) );
+			} else {
+				$message = urlencode( __( 'Synchronizion completed', 'loxo' ) );
+				wp_redirect( admin_url( 'edit.php?post_type=loxo_job&page=loxo-settings&message=' . $message ) );
+			}
 			exit;
 		}
 
@@ -80,12 +87,14 @@ class Page {
 			$synchronizer = new \Loxo\Synchronizer();
 			$synchronizer->cleanup();
 
-			wp_redirect( admin_url( 'edit.php?post_type=loxo_job&page=loxo-settings&all-deleted=true' ) );
+			$message = urlencode( __( 'All data deleted', 'loxo' ) );
+			wp_redirect( admin_url( 'edit.php?post_type=loxo_job&page=loxo-settings&message=' . $message ) );
 			exit;
 		}
 
 		// Schedule rewrite rules regeneration.
 		if ( isset( $_REQUEST['settings-updated'] ) ) {
+			delete_option( 'loxo_api_credentials_error' );
 			update_option( 'loxo_flush_rewrite_rules', time() );
 		}
 	}

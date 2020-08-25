@@ -18,6 +18,7 @@ printf(
 		echo '<h3 class="job-title">';
 			echo $job->get_name();
 		echo '</h3>';
+
 		echo '<div class="job-data">';
 			echo '<span class="job-published">';
 				printf(
@@ -49,7 +50,7 @@ printf(
 	echo '<div class="job-meta">';
 		if ( $job->get_salary() ) {
 			echo '<span class="job-salary">';
-				echo $job->get_salary();
+				echo loxo_salary( $job->get_salary() );
 			echo '</span>';
 		}
 
@@ -58,5 +59,15 @@ printf(
 		echo '</span>';
 
 	echo '</div>';
+
+	if ( $job->get_description() ) {
+		// TODO: Store job summary on post_excerpt rather than parsing description.
+		$summary = loxo_sanitize_job_description( $job->get_description() );
+		$summary = str_replace( "&nbsp;", "", wp_strip_all_tags( $summary ) );
+
+		echo '<div class="job-excerpt">';
+		echo wp_trim_words( $summary, 40, '...' );
+		echo '</div>';
+	}
 
 echo '</div></a>';

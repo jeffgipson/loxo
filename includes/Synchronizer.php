@@ -1,6 +1,10 @@
 <?php
 namespace Loxo;
 
+use Loxo\Job\Data as Job_Data;
+use Loxo\Job_Category\Data as Job_Category_Data;
+use Loxo\Job_State\Data as Job_State_Data;
+
 class Synchronizer {
 
     protected $logs = [];
@@ -43,13 +47,20 @@ class Synchronizer {
      * Synchronize jobs from loxo.
      */
     public function synchronize_jobs( $limit = null ) {
-        // Add a meta key to all existing local job. This makes sure we can delete unavailable/inactive jobs from local.
-        $this->jobs_to_be_updated();
-
         $jobs = loxo_get_all_jobs();
 
         if ( is_wp_error( $jobs ) ) {
-            return $jobs;
+            loxo_log( 'Loxo Api Error', array( 'error' => $jobs ) );
+            return false;
+        }
+
+        if ( $timestamp = wp_next_scheduled( 'loxo_synchronize_jobs' ) ) {
+            wp_unschedule_event( $timestamp, 'loxo_synchronize_jobs'  );
+        }
+
+        if ( ! $limit ) {
+            // Add a meta key to all existing local job. This makes sure we can delete unavailable/inactive jobs from local.
+            $this->jobs_to_be_updated();
         }
 
         if ( $limit ) {
@@ -61,7 +72,9 @@ class Synchronizer {
             $this->logs[] = $this->synchronize_collection_job( $job );
         }
 
-        $this->hide_orphan_jobs();
+        if ( ! $limit ) {
+            $this->hide_orphan_jobs();
+        }
     }
 
     public function jobs_to_be_updated() {
@@ -129,6 +142,10 @@ class Synchronizer {
     }
 
     public function synchronize_job( $job_id ) {
+        if ( $timestamp = wp_next_scheduled( 'loxo_synchronize_job', $job_id ) ) {
+            wp_unschedule_event( $timestamp, 'loxo_synchronize_job', $job_id );
+        }
+
         $job_data = loxo_api_get_job( $job_id, true );
 		if ( is_wp_error( $job_data ) ) {
 			return;
@@ -157,7 +174,7 @@ class Synchronizer {
     protected function get_job_data_props( $job_data ) {
         $job_state_id = 0;
 
-		$job_state = new \Loxo\Job_State\Data();
+		$job_state = new Job_State_Data();
 		if ( $job_data['state_code'] ) {
 			try {
 				$job_state->set_props([
@@ -175,12 +192,11 @@ class Synchronizer {
 
 		if ( $job_data['categories'] ) {
 			foreach ( $job_data['categories'] as $category ) {
-				$job_category = new \Loxo\Job_Category\Data();
+				$job_category = new Job_Category_Data();
 
 				try {
 					$job_category->set_props([
-						'name' => $category['name'],
-						'slug' => 'loxo-category-' . $category['id']
+						'name' => $category['name']
 					]);
 					$job_category->save();
 					$job_category_ids[] = $job_category->get_id();
