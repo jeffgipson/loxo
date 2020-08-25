@@ -181,7 +181,6 @@ class Frontend {
 				$job_states[] = array(
 					'name' => $job_state_term->name,
 					'count' => $job_state_term->count
-<<<<<<< HEAD
 				);
 			}
 
@@ -238,64 +237,6 @@ class Frontend {
 				$jobs[] = new \Loxo\Job\Data( $job_post->ID );
 			}
 
-=======
-				);
-			}
-
-			$selected_job_category = 'Any';
-			if ( isset( $_REQUEST['job_category'] ) ) {
-				$selected_job_category = $_REQUEST['job_category'];
-			}
-
-			$selected_job_state = 'Any';
-			if ( isset( $_REQUEST['job_state'] ) ) {
-				$selected_job_state = $_REQUEST['job_state'];
-			}
-
-			$tax_query = array(
-				'relation' => 'AND'
-			);
-
-			if ( 'Any' !== $selected_job_category ) {
-				$tax_query[] = array(
-					'taxonomy' => 'loxo_job_cat',
-					'field' => 'name',
-					'terms' => $selected_job_category
-				);
-			}
-
-			if ( 'Any' !== $selected_job_state ) {
-				$tax_query[] = array(
-					'taxonomy' => 'loxo_job_state',
-					'field' => 'name',
-					'terms' => $selected_job_state
-				);
-			}
-
-			# \Loxo\Utils::d( $tax_query );
-
-			$per_page = (int) get_option( 'loxo_listings_per_page', 10 );
-			if ( ! $per_page ) {
-				$per_page = 10;
-			}
-			$paged = get_query_var( 'paged' ) ? get_query_var( 'paged' ) : 1;
-
-			$jobs_query = new \WP_Query( array(
-				'post_type' => 'loxo_job',
-				'post_status' => 'publish',
-				'posts_per_page' => $per_page,
-				'paged' => $paged,
-				'tax_query' => $tax_query
-			));
-
-			$job_posts = $jobs_query->get_posts();
-
-			$jobs = array();
-			foreach ( $job_posts as $job_post ) {
-				$jobs[] = new \Loxo\Job\Data( $job_post->ID );
-			}
-
->>>>>>> master
 			ob_start();
 			include LOXO_DIR . '/templates/listing-content.php';
 			$content .= ob_get_clean();

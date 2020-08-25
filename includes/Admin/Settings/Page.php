@@ -54,14 +54,11 @@ class Page {
 
 			loxo_clear_all_cache();
 
-			wp_redirect( admin_url( 'options-general.php?page=loxo-settings&cache-cleared=true' ) );
+			wp_redirect( admin_url( 'edit.php?post_type=loxo_job&page=loxo-settings&cache-cleared=true' ) );
 			exit;
 		}
 
-<<<<<<< HEAD:includes/Admin/Settings/Page.php
 		// Synchronize all jobs.
-=======
->>>>>>> master:includes/Admin/Page/Settings.php
 		if ( isset( $_REQUEST['action'] ) && 'synchronize' === $_REQUEST['action'] ) {
 			if ( ! wp_verify_nonce( $_REQUEST['_wpnonce'], 'loxo_synchronize' ) ) {
 				wp_die( __( 'Cheating huh?' ) );
@@ -69,16 +66,11 @@ class Page {
 
 			$synchronizer = new \Loxo\Synchronizer();
 			$synchronizer->synchronize_jobs();
-<<<<<<< HEAD:includes/Admin/Settings/Page.php
-=======
-			#$synchronizer->display_logs();
->>>>>>> master:includes/Admin/Page/Settings.php
 
-			wp_redirect( admin_url( 'options-general.php?page=loxo-settings&synchronized=true' ) );
+			wp_redirect( admin_url( 'edit.php?post_type=loxo_job&page=loxo-settings&synchronized=true' ) );
 			exit;
 		}
 
-<<<<<<< HEAD:includes/Admin/Settings/Page.php
 		// Delete everything.
 		if ( isset( $_REQUEST['action'] ) && 'delete_all' === $_REQUEST['action'] ) {
 			if ( ! wp_verify_nonce( $_REQUEST['_wpnonce'], 'loxo_delete_all' ) ) {
@@ -88,12 +80,10 @@ class Page {
 			$synchronizer = new \Loxo\Synchronizer();
 			$synchronizer->cleanup();
 
-			wp_redirect( admin_url( 'options-general.php?page=loxo-settings&all-deleted=true' ) );
+			wp_redirect( admin_url( 'edit.php?post_type=loxo_job&page=loxo-settings&all-deleted=true' ) );
 			exit;
 		}
 
-=======
->>>>>>> master:includes/Admin/Page/Settings.php
 		// Schedule rewrite rules regeneration.
 		if ( isset( $_REQUEST['settings-updated'] ) ) {
 			update_option( 'loxo_flush_rewrite_rules', time() );
@@ -265,12 +255,9 @@ class Page {
 		#$synchronizer->sunc_jobs();
 		#$synchronizer->display_logs();
 
-<<<<<<< HEAD:includes/Admin/Settings/Page.php
 		#$post_type_object = get_post_type_object( 'loxo_job' );
 		#Utils::d( $post_type_object->cap );
 
-=======
->>>>>>> master:includes/Admin/Page/Settings.php
 		?>
 		<div class="wrap loxo-wrap">
 			<h1><?php _e( 'Loxo Settings', 'loxo' ) ?></h1>

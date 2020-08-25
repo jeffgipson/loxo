@@ -25,12 +25,7 @@ function loxo_get_salary_unit( $salary ) {
 }
 
 function loxo_sanitize_job_description( $desc ) {
-<<<<<<< HEAD
 	$desc = wpautop( $desc );
-=======
-	// return $desc;
-	/*
->>>>>>> master
 	$desc = str_replace(
 		array(
 			'<p>&nbsp;</p>'
@@ -39,10 +34,10 @@ function loxo_sanitize_job_description( $desc ) {
 			''
 		),
 		$desc
-	);*/
+	);
 	$desc = preg_replace( "/(^[\r\n]*|[\r\n]+)[\s\t]*[\r\n]+/", "\n", $desc );
 
-	return wpautop( $desc );
+	return $desc;
 }
 
 function loxo_get_sitemap_url() {
@@ -56,15 +51,9 @@ function loxo_get_sitemap_name() {
 function loxo_get_job_url( $job_id, $job_title = '' ) {
 	if ( loxo_get_listing_page_id() ) {
 		if ( ! $job_title ) {
-<<<<<<< HEAD
 			$job = new \Loxo\Job\Data( 'loxo-job-' . $job_id );
 			if ( $job->get_id() ) {
 				$job_title = $job->get_name();
-=======
-			$job = loxo_api_get_job( $job_id );
-			if ( ! is_wp_error( $job ) && isset( $job['title'] ) ) {
-				$job_title = $job['title'];
->>>>>>> master
 			}
 		}
 
@@ -113,7 +102,6 @@ function loxo_clear_all_cache() {
  * @return mixed All jobs array or WP_Error.
  */
 function loxo_get_all_jobs() {
-<<<<<<< HEAD
 	$params = array(
 		'page'     => 1,
 		'per_page' => 100,
@@ -126,19 +114,6 @@ function loxo_get_all_jobs() {
 	*/
 
 	$api_jobs = loxo_api_get_jobs( $params );
-=======
-	$cache_ttl = 300;
-
-	$params = array(
-		'page'     => 1,
-		'per_page' => 100,
-	);
-	if ( get_option( 'loxo_active_job_status_id' ) ) {
-		$params['job_status_id'] = get_option( 'loxo_active_job_status_id' );
-	}
-
-	$api_jobs = loxo_api_get_jobs( $params, $cache_ttl );
->>>>>>> master
 	if ( is_wp_error( $api_jobs ) ) {
 		return $api_jobs;
 	}
@@ -147,11 +122,7 @@ function loxo_get_all_jobs() {
 
 	if ( $params['page'] < $api_jobs['total_pages'] ) {
 		for ( $params['page'] = 2; $params['page'] <= $api_jobs['total_pages']; $params['page'] ++ ) {
-<<<<<<< HEAD
 			$api_jobs = loxo_api_get_jobs( $params );
-=======
-			$api_jobs = loxo_api_get_jobs( $params, $cache_ttl );
->>>>>>> master
 			if ( ! is_wp_error( $api_jobs ) && ! empty( $api_jobs['results'] ) ) {
 				$jobs = array_merge( $jobs, $api_jobs['results'] );
 			}
@@ -202,13 +173,8 @@ function loxo_api_get_job_statuses() {
  *
  * @return array Job details.
  */
-<<<<<<< HEAD
 function loxo_api_get_job( $id, $refresh = false ) {
 	return loxo_api_get( "/jobs/{$id}/", array(), 300, $refresh );
-=======
-function loxo_api_get_job( $id, $ttl = 300 ) {
-	return loxo_api_get( "/jobs/{$id}/", array(), $ttl );
->>>>>>> master
 }
 
 /**
@@ -216,13 +182,8 @@ function loxo_api_get_job( $id, $ttl = 300 ) {
  *
  * @return array Array of jobs.
  */
-<<<<<<< HEAD
 function loxo_api_get_jobs( $params = array(), $refresh = false ) {
 	return loxo_api_get( '/jobs/', $params, 300, $refresh );
-=======
-function loxo_api_get_jobs( $params = array(), $cache = 60 ) {
-	return loxo_api_get( '/jobs/', $params, $cache );
->>>>>>> master
 }
 
 /**
@@ -234,11 +195,7 @@ function loxo_api_get_jobs( $params = array(), $cache = 60 ) {
  * 
  * @return mixed.
  */
-<<<<<<< HEAD
 function loxo_api_get( $path, $params = array(), $ttl = 0, $refresh = false ) {
-=======
-function loxo_api_get( $path, $params = array(), $ttl = 0 ) {
->>>>>>> master
 	$agency_key   = get_option( 'loxo_agency_key' );
 	$api_username = get_option( 'loxo_api_username' );
 	$api_password = get_option( 'loxo_api_password' );
@@ -250,13 +207,8 @@ function loxo_api_get( $path, $params = array(), $ttl = 0 ) {
 		);
 	}
 
-<<<<<<< HEAD
 	$cache_key = 'loxo_cache_'. md5( $agency_key . $path . serialize( $params ) );
 	if ( $ttl > 0 && ! $refresh ) {
-=======
-	if ( $ttl > 0 ) {
-		$cache_key = 'loxo_cache_'. md5( $agency_key . $path . serialize( $params ) );
->>>>>>> master
 		if ( false !== get_transient( $cache_key ) ) {
 			return get_transient( $cache_key );
 		}
