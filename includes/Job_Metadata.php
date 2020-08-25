@@ -25,8 +25,8 @@ class Job_Metadata {
 	}
 
 	public function display() {
-		$title = sprintf( '%s | %s', $this->job['title'], get_bloginfo( 'sitename' ) );
-		$url = loxo_get_job_url( $this->job['id'], $this->job['title'] );
+		$title = sprintf( '%s | %s', $this->job->get_name(), get_bloginfo( 'sitename' ) );
+		$url = loxo_get_job_url( $this->job->get_job_id(), $this->job->get_name() );
 		$description = $this->get_job_meta_description();
 
 		$schema = $this->get_job_schema_data();
@@ -45,8 +45,8 @@ class Job_Metadata {
 	<meta property="og:description" content="<?php echo $description; ?>" />
 	<meta property="og:url" content="<?php echo $url; ?>" />
 	<meta property="og:site_name" content="<?php echo get_bloginfo( 'sitename' ); ?>" />
-<?php if ( loxo_get_job_updated_at( $this->job['id'] ) ) : ?>
-	<meta property="article:modified_time" content="<?php echo gmdate( DATE_W3C, strtotime( loxo_get_job_updated_at( $this->job['id'] ) ) ); ?>" />
+<?php if ( $this->job->get_date_updated() ) : ?>
+	<meta property="article:modified_time" content="<?php echo gmdate( DATE_W3C, strtotime( $this->job->get_date_updated() ) ); ?>" />
 <?php endif; ?>
 <?php if ( ! is_wp_error( $schema ) ) : ?>
 	<script type="application/ld+json">
@@ -59,14 +59,14 @@ class Job_Metadata {
 	}
 
 	private function get_job_meta_description() {
-		$description = sprintf( 'Hiring %s - %s.', ucwords( strtolower( $this->job['title'] ) ), $this->job['job_type']['name'] );
+		$description = sprintf( 'Hiring %s - %s.', ucwords( strtolower( $this->job->get_name() ) ), $this->job->get_type() );
 
-		if ( ! empty( $this->job['city'] ) ) {
-			$description .= sprintf( ' Job location %s.', $this->job['city'] );
+		if ( ! empty( $this->job->get_city() ) ) {
+			$description .= sprintf( ' Job location %s.', $this->job->get_city() );
 		}
 
-		if ( ! empty( $this->job['salary'] ) ) {
-			$description .= sprintf( ' Compensation %s.', $this->job['salary'] );
+		if ( ! empty( $this->job->get_salary() ) ) {
+			$description .= sprintf( ' Compensation %s.', $this->job->get_salary() );
 		}
 
 		return $description;
@@ -74,26 +74,20 @@ class Job_Metadata {
 
 	private function get_job_schema_data() {
 		// Date posted.
-		if ( loxo_get_job_published_at( $this->job['id'] ) ) {
-			$date_posted = gmdate( 'Y-m-d', strtotime( loxo_get_job_published_at( $this->job['id'] ) ) );
-		} else {
-			// Use the pushing date of the listing page.
-			$listing_page = get_page( loxo_get_listing_page_id() );
-			$date_posted = gmdate( 'Y-m-d', strtotime( $listing_page->post_date_gmt ) );
-		}
+		$date_posted = gmdate( 'Y-m-d', strtotime( $this->job->get_date_published() ) );
 
 		// Valid through.
 		$expiration_field = get_option( 'loxo_job_expiration_custom_field' );
-		if ( ! empty( $this->job[ $expiration_field ] ) && 'null' !== $this->job[ $expiration_field ] ) {
-			$valid_through = gmdate( 'Y-m-d', strtotime( $this->job[ $expiration_field ] ) );
+		if ( $this->job->get_date_expires() ) {
+			$valid_through = gmdate( 'Y-m-d', strtotime( $this->job->get_date_expires() ) );
 		} else {
 			$valid_through = gmdate( 'Y-m-d', strtotime( $date_posted ) + ( DAY_IN_SECONDS * get_option( 'loxo_default_job_validity_days', 180 ) ) );
 		}
 
 		// Default employmentType is full time, change if needed.
 		$employment_type = 'FULL_TIME';
-		if ( ! empty( $this->job['job_type'] ) ) {
-			if ( 'Contract' === $this->job['job_type']['name'] ) {
+		if ( $this->job->get_type() ) {
+			if ( 'Contract' === $this->job->get_type() ) {
 				$employment_type = "CONTRACTOR";
 			}
 		}
@@ -101,12 +95,12 @@ class Job_Metadata {
 		$schema = array(
 			"@context"    => "https://schema.org/",
 			"@type"       => "JobPosting",
-			"title"       => $this->job['title'],
-			"description" => $this->job['description_text'],
+			"title"       => $this->job->get_name(),
+			"description" => $this->job->get_description(),
 			"identifier"  => array(
 				"@type" => "PropertyValue",
 				"name"  => get_option( 'loxo_hiring_company_name', get_bloginfo( 'sitename') ),
-				"value" => $this->job['id']
+				"value" => $this->job->get_job_id()
 			),
 			"datePosted"         => $date_posted,
 			"validThrough"       => $valid_through,
@@ -131,49 +125,40 @@ class Job_Metadata {
 		);
 
 		// streetAddress.
-		if ( ! empty( $this->job['address'] ) && 'null' !== $this->job['address'] ) {
-			$schema['jobLocation']['address']['streetAddress'] = $this->job['address'];
+		if ( $this->job->get_address() ) {
+			$schema['jobLocation']['address']['streetAddress'] = $this->job->get_address();
 		}
 
 		// addressLocality.
 		// Missing.
 
 		// addressRegion.
-		if ( ! empty( $this->job['state_code'] ) && 'null' !== $this->job['state_code'] ) {
-			$schema['jobLocation']['address']['addressRegion'] = $this->job['state_code'];
+		if ( $this->job->get_state_id() ) {
+			$state = new \Loxo\Job_State\Data( $this->job->get_state_id() );
+			$schema['jobLocation']['address']['addressRegion'] = $state->get_name();
 		}
 
 		// addressLocality.
-		if ( ! empty( $this->job['city'] ) && 'null' !== $this->job['city'] ) {
-			$schema['jobLocation']['address']['addressLocality'] = $this->job['city'];
+		if ( $this->job->get_city() ) {
+			$schema['jobLocation']['address']['addressLocality'] = $this->job->get_city();
 		}
 
 		// addressCountry.
-		if ( ! empty( $this->job['country_code'] ) && 'null' !== $this->job['country_code'] ) {
-			$schema['jobLocation']['address']['addressCountry'] = $this->job['country_code'];
+		if ( $this->job->get_country_code() ) {
+			$schema['jobLocation']['address']['addressCountry'] = $this->job->get_country_code();
 		}
 
 		// postalCode.
-		if ( ! empty( $this->job['zip'] ) && 'null' !== $this->job['zip'] ) {
-			$schema['jobLocation']['address']['postalCode'] = $this->job['zip'];
+		if ( $this->job->get_zip() ) {
+			$schema['jobLocation']['address']['postalCode'] = $this->job->get_zip();
 		}
 
 		// Add salary to schema.
-		if ( ! empty( $this->job['salary'] ) ) {
-			$salary = preg_replace( '/[^0-9\.]/i', '', trim( $this->job['salary'] ) );
+		if ( ! empty( $this->job->get_salary() ) ) {
+			$salary = preg_replace( '/[^0-9\.]/i', '', trim( $this->job->get_salary() ) );
 
 			if ( ! empty( $salary ) ) {
-
-				$unit_text = 'YEAR';
-				if ( false !== strpos( strtolower( $this->job['salary'] ), 'per hour' ) ) {
-					$unit_text = 'HOUR';
-				} elseif ( false !== strpos( strtolower( $this->job['salary'] ), 'per day' ) ) {
-					$unit_text = 'DAY';
-				} elseif ( false !== strpos( strtolower( $this->job['salary'] ), 'per week' ) ) {
-					$unit_text = 'WEEK';
-				} elseif ( false !== strpos( strtolower( $this->job['salary'] ), 'per month' ) ) {
-					$unit_text = 'MONTH';
-				}
+				$unit_text = loxo_get_salary_unit( $this->job->get_salary() );
 
 				$schema['baseSalary'] = array(
 					"@type"    => "MonetaryAmount",

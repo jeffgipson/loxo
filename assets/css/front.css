@@ -1,7 +1,7 @@
 /* Form */
 .loxo-form{
-	border-radius: 5px;
 	padding: 20px 30px;
+	background-color: #fff;
 	border: 1px solid #ddd;
 }
 .loxo-form .field-row{
@@ -68,16 +68,20 @@
 	padding: 20px;
 	transition: all .3s ease-in-out;
 	background-color: #FFF;
-	border-bottom: 4px solid #4396e6;
+	border-bottom: 4px solid #33c69a;
 }
 .loxo-jobs .loxo-job:hover .job-inner{
 	background-color: #F8F8F8;
 }
 .loxo-jobs .job-title{
 	margin: 0;
+	color: #0264a7;
+	font-size: 22px;
 }
+.loxo-jobs .job-id,
 .loxo-jobs .job-data{
 	color: #999;
+	font-size: 14px;
 }
 .loxo-jobs .no-jobs{
 	color: red;
@@ -92,14 +96,23 @@
 	border: 1px solid #ddd;
 }
 
+/* Pagination */
+.loxo-pagination{
+	margin: 20px;
+	text-align: center;
+}
+
 /* Single Job */
 .loxo-single-job h3{
 	margin-top: 3rem;
 }
+.loxo-single-job .job-meta{
+	margin: 10px 0 20px;
+}
 .loxo-single-job .job-meta dt{
 	float: left;
 	margin-right: 10px;
-	min-width: 100px;
+	min-width: 120px;
 }
 .loxo-single-job .job-meta dd{
 	display: block;
@@ -122,6 +135,7 @@
 	margin: 20px 0;
 }
 .loxo-job-share-icons a{
+	color: #0264a7;
 	width: 50px;
 	padding: 10px;
 	margin: 0 5px;
@@ -129,7 +143,7 @@
 	line-height: 24px;
 	text-align: center;
 	display: inline-block;
-	border: 2px solid #4396e6;
+	border: 2px solid #33c69a;
 }
 
 /* Responsive */
