@@ -9,6 +9,33 @@ class Synchronizer {
         Utils::p( $this->logs );
     }
 
+    public function cleanup() {
+        $taxonomies = array( 'loxo_job_cat', 'loxo_job_state' );
+        $post_types = array( 'loxo_job' );
+
+        foreach ( $taxonomies as $taxonomy ) {
+            $terms = get_terms( array(
+                'taxonomy' => $taxonomy,
+                'hide_empty' => false
+            ));
+            foreach ( $terms as $term ) {
+                wp_delete_term( $term->term_id, $taxonomy );
+            }
+        }
+
+        foreach ( $post_types as $post_type ) {
+            $posts = get_posts( array(
+                'post_type' => $post_type,
+                'post_status' => 'all',
+                'posts_per_page' => -1
+            ));
+
+            foreach ( $posts as $post ) {
+                wp_delete_post( $post->ID, true );
+            }
+        }
+    }
+
     public function synchronize_jobs( $limit = null ) {
         $this->jobs_to_be_updated();
 
@@ -74,8 +101,11 @@ class Synchronizer {
             }
 
             $job->set_props( $this->get_job_data_props( $job_data ) );
-            $job->set_date_published( date( 'Y-m-d H:i:s', strtotime( $job_data['published_at'] ) ) );
+            if ( ! empty( $job_data['published_at'] ) ) {
+                $job->set_date_published( get_date_from_gmt( $job_data['published_at'] ) );
+            }
             $job->set_date_checked( current_time( 'mysql' ) );
+            $job->set_status( 'publish' );
 
             $job->save();
 
@@ -86,7 +116,12 @@ class Synchronizer {
         }
     }
 
-    public function synchronize_job( $job_data ) {
+    public function synchronize_job( $job_id ) {
+        $job_data = loxo_api_get_job( $job_id, true );
+		if ( is_wp_error( $job_data ) ) {
+			return;
+		}
+
         $slug = 'loxo-job-' . $job_data['id'];
 
         try {
@@ -95,6 +130,8 @@ class Synchronizer {
             $job->set_props( $this->get_job_data_props( $job_data ) );
             $job->set_description( $job_data['description'] );
             $job->set_date_checked( current_time( 'mysql' ) );
+            $job->set_status( 'publish' );
+            $job->set_user_id( '0' );
 
             $job->save();
 
@@ -145,7 +182,6 @@ class Synchronizer {
         $slug = 'loxo-job-' . $job_data['id'];
 
         $props = [
-            'status' => 'publish',
             'name' => $job_data['title'],
             'slug' => $slug,
             'job_id' => $job_data['id'],

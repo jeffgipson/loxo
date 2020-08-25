@@ -122,6 +122,9 @@ class Frontend {
 
 		// Add single job metadata + schema.
 		add_action( 'wp_head', array( $this, 'single_job_metadata' ), 1 );
+
+		#echo loxo_sanitize_job_description( $local_job->get_description() );
+		#exit;
 	}
 
 	/**

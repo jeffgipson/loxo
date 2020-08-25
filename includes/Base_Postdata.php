@@ -207,7 +207,7 @@ abstract class Base_Postdata extends Base_Data
 	{
 		// let other plugin filter before a profile is being deleted
 		try {
-			do_action('prpg/'. $this->data_type .'_delete', $this->get_id());
+			do_action('loxo/'. $this->data_type .'_delete', $this->get_id());
 		} catch(Exception $e ){
 			throw new Exception($e->getMessage(), $e->getCode());
 			return;
@@ -217,7 +217,7 @@ abstract class Base_Postdata extends Base_Data
 		wp_delete_post($this->get_id(), true);
 
 		// let other plugin know that a profile were deleted
-		do_action('prpg/'. $this->data_type .'_deleted', $this->get_id());
+		do_action('loxo/'. $this->data_type .'_deleted', $this->get_id());
 
 		return true;
 	}
@@ -239,7 +239,7 @@ abstract class Base_Postdata extends Base_Data
 
 		// let other plugin filter profile data or throw exception
 		try {
-			$data = apply_filters('prpg/'. $this->data_type .'_create', $this->get_changes());
+			$data = apply_filters('loxo/'. $this->data_type .'_create', $this->get_changes());
 		} catch(Exception $e ){
 			throw new Exception($e->getMessage(), $e->getCode());
 			return false;
@@ -278,7 +278,7 @@ abstract class Base_Postdata extends Base_Data
 		$this->update_metadata($data);
 		$this->apply_changes();
 
-		do_action('prpg/'. $this->data_type .'_created', $this->get_id(), $this->get_data());
+		do_action('loxo/'. $this->data_type .'_created', $this->get_id(), $this->get_data());
 	}
 
 	public function update_taxonomies($tax_input = [])
@@ -308,7 +308,7 @@ abstract class Base_Postdata extends Base_Data
 
 		// let other plugin filter profile data or throw exception
 		try {
-			$changes = apply_filters('prpg/'. $this->data_type .'_update', $this->get_changes(), $this->get_id());
+			$changes = apply_filters('loxo/'. $this->data_type .'_update', $this->get_changes(), $this->get_id());
 		} catch(Exception $e ){
 			throw new Exception($e->getMessage(), $e->getCode());
 			return;
@@ -353,7 +353,7 @@ abstract class Base_Postdata extends Base_Data
 			$this->apply_changes();
 		}
 
-		do_action('prpg/'. $this->data_type .'_updated', $this->get_id(), $this->get_data(), $changes);
+		do_action('loxo/'. $this->data_type .'_updated', $this->get_id(), $this->get_data(), $changes);
 	}
 
 	protected function validate_save()

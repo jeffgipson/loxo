@@ -1,5 +1,5 @@
 <?php
-namespace Loxo\Admin\Page;
+namespace Loxo\Admin\Settings;
 
 use Loxo\Utils;
 use Loxo\Admin\WP_Settings_Api;
@@ -8,10 +8,10 @@ use Loxo\Admin\WP_Settings_Api;
  * Admin Settings Page Class.
  *
  * @package Loxo
- * @class Loxo_Admin_Modules_Page
+ * @class Loxo\Admin\Settings\Page
  */
 
-class Settings {
+class Page {
 	private $settings_api;
 
 	/**
@@ -33,9 +33,9 @@ class Settings {
 
 		// Register menu.
 		$admin_page = add_submenu_page(
-			'options-general.php',
+			'edit.php?post_type=loxo_job',
 			__( 'Loxo Settings', 'loxo' ),
-			__( 'Loxo Settings', 'loxo' ),
+			__( 'Settings', 'loxo' ),
 			$access_cap,
 			'loxo-settings',
 			array( $this, 'render_page' )
@@ -46,7 +46,7 @@ class Settings {
 	}
 
 	public function handle_actions() {
-		// Schedule rewrite rules regeneration.
+		// Clear cache.
 		if ( isset( $_REQUEST['action'] ) && 'clear_cache' === $_REQUEST['action'] ) {
 			if ( ! wp_verify_nonce( $_REQUEST['_wpnonce'], 'loxo_clear_cache' ) ) {
 				wp_die( __( 'Cheating huh?' ) );
@@ -54,10 +54,11 @@ class Settings {
 
 			loxo_clear_all_cache();
 
-			wp_redirect( admin_url( 'options-general.php?page=loxo-settings&cache-cleared=true' ) );
+			wp_redirect( admin_url( 'edit.php?post_type=loxo_job&page=loxo-settings&cache-cleared=true' ) );
 			exit;
 		}
 
+		// Synchronize all jobs.
 		if ( isset( $_REQUEST['action'] ) && 'synchronize' === $_REQUEST['action'] ) {
 			if ( ! wp_verify_nonce( $_REQUEST['_wpnonce'], 'loxo_synchronize' ) ) {
 				wp_die( __( 'Cheating huh?' ) );
@@ -65,9 +66,21 @@ class Settings {
 
 			$synchronizer = new \Loxo\Synchronizer();
 			$synchronizer->synchronize_jobs();
-			#$synchronizer->display_logs();
 
-			wp_redirect( admin_url( 'options-general.php?page=loxo-settings&synchronized=true' ) );
+			wp_redirect( admin_url( 'edit.php?post_type=loxo_job&page=loxo-settings&synchronized=true' ) );
+			exit;
+		}
+
+		// Delete everything.
+		if ( isset( $_REQUEST['action'] ) && 'delete_all' === $_REQUEST['action'] ) {
+			if ( ! wp_verify_nonce( $_REQUEST['_wpnonce'], 'loxo_delete_all' ) ) {
+				wp_die( __( 'Cheating huh?' ) );
+			}
+
+			$synchronizer = new \Loxo\Synchronizer();
+			$synchronizer->cleanup();
+
+			wp_redirect( admin_url( 'edit.php?post_type=loxo_job&page=loxo-settings&all-deleted=true' ) );
 			exit;
 		}
 
@@ -93,6 +106,10 @@ class Settings {
             array(
                 'id'    => 'general',
                 'title' => __( 'General Settings', 'loxo' )
+            ),
+            array(
+                'id'    => 'synchronizer',
+                'title' => __( 'Synchronizer Setting', 'loxo' )
             ),
             array(
                 'id'    => 'seo',
@@ -151,6 +168,7 @@ class Settings {
                     'id'                => 'loxo_job_expiration_custom_field',
                     'name'              => 'loxo_job_expiration_custom_field',
                     'label'             => __( 'Name of the job expiration custom field', 'loxo' ),
+					'desc'				=> __( 'If loxo has enabled a custom date field for you that you would use for job expiration/validthrough date, enter the field name here.', 'loxo' ),
 					'type'              => 'text',
                     'sanitize_callback' => 'sanitize_text_field'
                 ),
@@ -162,7 +180,18 @@ class Settings {
 					'type'              => 'text',
                     'sanitize_callback' => 'sanitize_text_field'
                 )
-            ),
+			),
+			'synchronizer' => array(
+				array(
+                    'id'                => 'loxo_all_jobs_synchronizer_interval',
+                    'name'              => 'loxo_all_jobs_synchronizer_interval',
+                    'label'             => __( 'Jobs Update Frequency (in minutes)', 'loxo' ),
+					'desc'				=> __( 'How frequently jobs should be updated.', 'loxo' ),
+                    'type'              => 'text',
+					'default'			=> 300,
+                    'sanitize_callback' => 'sanitize_text_field'
+				)
+			),
             'seo' => array(
                 array(
                     'id'                => 'loxo_hiring_company_name',
@@ -226,6 +255,9 @@ class Settings {
 		#$synchronizer->sunc_jobs();
 		#$synchronizer->display_logs();
 
+		#$post_type_object = get_post_type_object( 'loxo_job' );
+		#Utils::d( $post_type_object->cap );
+
 		?>
 		<div class="wrap loxo-wrap">
 			<h1><?php _e( 'Loxo Settings', 'loxo' ) ?></h1>
@@ -233,8 +265,7 @@ class Settings {
 				<p>
 					<?php
 					_e(
-						'Loxo api jobs requests & single job data are cached with five minutes interval.
-						Reset cache to see fresh content if needed.', 'loxo'
+						'Clear cached data.', 'loxo'
 					);
 					?></br/></br/><a class="button button-primary" href="<?php echo add_query_arg(
 						array(
@@ -242,6 +273,41 @@ class Settings {
 							'_wpnonce' => wp_create_nonce( 'loxo_clear_cache' )
 						)
 					); ?>"><?php _e( 'Clear Cache', 'loxo' ); ?></a>
+				</p>
+				<hr />
+
+				<p>
+					<?php
+					_e(
+						'All jobs are stored locally for quick access. You can synchronize jobs from loxo to local storage using button below', 'loxo'
+					);
+					?></br/></br/><a class="button button-primary" href="<?php echo add_query_arg(
+						array(
+							'action' => 'synchronize',
+							'_wpnonce' => wp_create_nonce( 'loxo_synchronize' )
+						)
+					); ?>"><?php _e( 'Synchronize', 'loxo' ); ?></a>
+					<?php 
+					if ( $timestamp = wp_next_scheduled( 'loxo_synchronize_all_jobs' ) ) {
+						echo '<br /><br /><strong>';
+						printf( __( 'Auto synchronizer will run in %s' ), human_time_diff( $timestamp ) );
+						echo '</strong>';
+					}
+					?>
+				</p>
+				<hr />
+
+				<p>
+					<?php
+					_e(
+						'Delete all jobs, categories & states from local storate', 'loxo'
+					);
+					?></br/></br/><a class="button button-primary button-danger" href="<?php echo add_query_arg(
+						array(
+							'action' => 'delete_all',
+							'_wpnonce' => wp_create_nonce( 'loxo_delete_all' )
+						)
+					); ?>"><?php _e( 'Delete All', 'loxo' ); ?></a>
 				</p>
 
 				<p>
@@ -258,6 +324,7 @@ class Settings {
 				</p>
 
 				<?php if ( 'yes' === get_option( 'loxo_enable_sitemap' ) ) : ?>
+					<hr />
 					<p>
 						<?php _e( 'A sitemap is automatically generated for all active jobs. It is also added on the robots.txt file so that search engine both can find it. Click view sitemap to see how it looks.', 'loxo' ); ?>
 						<br /><br /><a class="button button-secondary" target="_blank" href="<?php echo loxo_get_sitemap_url(); ?>"><?php _e( 'View Sitemap' ); ?></a>

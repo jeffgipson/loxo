@@ -21,6 +21,9 @@ class Main {
 	 * Constructor
 	 */
 	public function __construct() {
+		new Jobs();
+		new Settings\Page();
+
 		add_action( 'admin_enqueue_scripts', array( $this, 'register_admin_scripts' ), 5 );
 		add_action( 'plugin_action_links_' . LOXO_BASENAME, array( $this, 'plugin_action_links' ) );
 	}
