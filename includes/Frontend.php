@@ -107,12 +107,9 @@ class Frontend {
 
 		// If job does not have description yet, this will update description.
 		if ( ! $local_job->get_description() ) {
-			do_action( 'loxo_synchronize_single_job', $job_id );
+			do_action( 'loxo_synchronize_job', $job_id );
 		} else {
-			// Schedule single job update using cron.
-			if ( ! wp_next_scheduled( 'loxo_synchronize_single_job', array( $job_id ) ) ) {
-				wp_schedule_single_event( time(), 'loxo_synchronize_single_job', array( $job_id ) );
-			}
+			do_action( 'loxo_schedule_job_synchronization', $job_id, 10 );
 		}
 
 		// Remove Yoast seo metadata.

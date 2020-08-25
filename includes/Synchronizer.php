@@ -9,6 +9,9 @@ class Synchronizer {
         Utils::p( $this->logs );
     }
 
+    /**
+     * Delete jobs, categories & states.
+     */
     public function cleanup() {
         $taxonomies = array( 'loxo_job_cat', 'loxo_job_state' );
         $post_types = array( 'loxo_job' );
@@ -36,10 +39,13 @@ class Synchronizer {
         }
     }
 
+    /**
+     * Synchronize jobs from loxo.
+     */
     public function synchronize_jobs( $limit = null ) {
+        // Add a meta key to all existing local job. This makes sure we can delete unavailable/inactive jobs from local.
         $this->jobs_to_be_updated();
 
-        // loxo_clear_all_cache();
         $jobs = loxo_get_all_jobs();
 
         if ( is_wp_error( $jobs ) ) {
@@ -96,6 +102,7 @@ class Synchronizer {
         try {
             $job = new \Loxo\Job\Data( $slug );
 
+            // Existing local job.
             if ( $job->get_id() ) {
                 delete_post_meta( $job->get_id(), '_loxo_update_scheduled' );
             }
@@ -108,6 +115,11 @@ class Synchronizer {
             $job->set_status( 'publish' );
 
             $job->save();
+
+            if ( ! $job->get_description() ) {
+                // Schedule so that job description gets updated.
+                do_action( 'loxo_schedule_job_synchronization', $job->get_job_id(), 5 );
+            }
 
             return $job->get_id();
 
