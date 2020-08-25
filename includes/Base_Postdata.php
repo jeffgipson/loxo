@@ -207,7 +207,11 @@ abstract class Base_Postdata extends Base_Data
 	{
 		// let other plugin filter before a profile is being deleted
 		try {
+<<<<<<< HEAD
 			do_action('loxo/'. $this->data_type .'_delete', $this->get_id());
+=======
+			do_action('prpg/'. $this->data_type .'_delete', $this->get_id());
+>>>>>>> master
 		} catch(Exception $e ){
 			throw new Exception($e->getMessage(), $e->getCode());
 			return;
@@ -217,7 +221,11 @@ abstract class Base_Postdata extends Base_Data
 		wp_delete_post($this->get_id(), true);
 
 		// let other plugin know that a profile were deleted
+<<<<<<< HEAD
 		do_action('loxo/'. $this->data_type .'_deleted', $this->get_id());
+=======
+		do_action('prpg/'. $this->data_type .'_deleted', $this->get_id());
+>>>>>>> master
 
 		return true;
 	}
@@ -239,7 +247,11 @@ abstract class Base_Postdata extends Base_Data
 
 		// let other plugin filter profile data or throw exception
 		try {
+<<<<<<< HEAD
 			$data = apply_filters('loxo/'. $this->data_type .'_create', $this->get_changes());
+=======
+			$data = apply_filters('prpg/'. $this->data_type .'_create', $this->get_changes());
+>>>>>>> master
 		} catch(Exception $e ){
 			throw new Exception($e->getMessage(), $e->getCode());
 			return false;
@@ -278,7 +290,11 @@ abstract class Base_Postdata extends Base_Data
 		$this->update_metadata($data);
 		$this->apply_changes();
 
+<<<<<<< HEAD
 		do_action('loxo/'. $this->data_type .'_created', $this->get_id(), $this->get_data());
+=======
+		do_action('prpg/'. $this->data_type .'_created', $this->get_id(), $this->get_data());
+>>>>>>> master
 	}
 
 	public function update_taxonomies($tax_input = [])
@@ -308,7 +324,11 @@ abstract class Base_Postdata extends Base_Data
 
 		// let other plugin filter profile data or throw exception
 		try {
+<<<<<<< HEAD
 			$changes = apply_filters('loxo/'. $this->data_type .'_update', $this->get_changes(), $this->get_id());
+=======
+			$changes = apply_filters('prpg/'. $this->data_type .'_update', $this->get_changes(), $this->get_id());
+>>>>>>> master
 		} catch(Exception $e ){
 			throw new Exception($e->getMessage(), $e->getCode());
 			return;
@@ -353,7 +373,11 @@ abstract class Base_Postdata extends Base_Data
 			$this->apply_changes();
 		}
 
+<<<<<<< HEAD
 		do_action('loxo/'. $this->data_type .'_updated', $this->get_id(), $this->get_data(), $changes);
+=======
+		do_action('prpg/'. $this->data_type .'_updated', $this->get_id(), $this->get_data(), $changes);
+>>>>>>> master
 	}
 
 	protected function validate_save()

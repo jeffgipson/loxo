@@ -9,6 +9,7 @@ class Synchronizer {
         Utils::p( $this->logs );
     }
 
+<<<<<<< HEAD
     public function cleanup() {
         $taxonomies = array( 'loxo_job_cat', 'loxo_job_state' );
         $post_types = array( 'loxo_job' );
@@ -36,6 +37,8 @@ class Synchronizer {
         }
     }
 
+=======
+>>>>>>> master
     public function synchronize_jobs( $limit = null ) {
         $this->jobs_to_be_updated();
 
@@ -101,11 +104,16 @@ class Synchronizer {
             }
 
             $job->set_props( $this->get_job_data_props( $job_data ) );
+<<<<<<< HEAD
             if ( ! empty( $job_data['published_at'] ) ) {
                 $job->set_date_published( get_date_from_gmt( $job_data['published_at'] ) );
             }
             $job->set_date_checked( current_time( 'mysql' ) );
             $job->set_status( 'publish' );
+=======
+            $job->set_date_published( date( 'Y-m-d H:i:s', strtotime( $job_data['published_at'] ) ) );
+            $job->set_date_checked( current_time( 'mysql' ) );
+>>>>>>> master
 
             $job->save();
 
@@ -116,12 +124,16 @@ class Synchronizer {
         }
     }
 
+<<<<<<< HEAD
     public function synchronize_job( $job_id ) {
         $job_data = loxo_api_get_job( $job_id, true );
 		if ( is_wp_error( $job_data ) ) {
 			return;
 		}
 
+=======
+    public function synchronize_job( $job_data ) {
+>>>>>>> master
         $slug = 'loxo-job-' . $job_data['id'];
 
         try {
@@ -130,8 +142,11 @@ class Synchronizer {
             $job->set_props( $this->get_job_data_props( $job_data ) );
             $job->set_description( $job_data['description'] );
             $job->set_date_checked( current_time( 'mysql' ) );
+<<<<<<< HEAD
             $job->set_status( 'publish' );
             $job->set_user_id( '0' );
+=======
+>>>>>>> master
 
             $job->save();
 
@@ -182,6 +197,10 @@ class Synchronizer {
         $slug = 'loxo-job-' . $job_data['id'];
 
         $props = [
+<<<<<<< HEAD
+=======
+            'status' => 'publish',
+>>>>>>> master
             'name' => $job_data['title'],
             'slug' => $slug,
             'job_id' => $job_data['id'],

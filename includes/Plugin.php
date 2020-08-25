@@ -30,7 +30,11 @@ final class Plugin {
 	 *
 	 * @var string
 	 */
+<<<<<<< HEAD
 	public $version = '1.0.6';
+=======
+	public $version = '1.0.5';
+>>>>>>> master
 
 	/**
 	 * Singleton The reference the *Singleton* instance of this class.
@@ -63,6 +67,11 @@ final class Plugin {
 
 		add_action( 'init', array( $this, 'maybe_flush_rewrite_rules' ), 20 );
 		add_action( 'init', array( $this, 'load_plugin_translations' ) );
+<<<<<<< HEAD
+=======
+		add_action( 'loxo_synchronize_all_jobs', array( $this, 'synchronize_all_jobs' ) );
+		add_action( 'loxo_synchronize_single_job', array( $this, 'synchronize_single_job' ) );
+>>>>>>> master
 	}
 
 	/**
@@ -77,11 +86,41 @@ final class Plugin {
 	}
 
 	/**
+<<<<<<< HEAD
+=======
+	 * Pre cache all jobs for better performance.
+	 */
+	public function synchronize_all_jobs() {
+		$synchronizer = new Synchronizer();
+		$synchronizer->synchronize_jobs();
+	}
+
+	/**
+	 * Pre cache all jobs for better performance.
+	 */
+	public function synchronize_single_job( $job_id ) {
+		$job_data = loxo_api_get_job( $job_id, 0 );
+		if ( ! is_wp_error( $job_data ) ) {
+			$synchronizer = new Synchronizer();
+			$synchronizer->synchronize_job( $job_data );
+		}
+	}
+
+	/**
+>>>>>>> master
 	 * Initialize the plugin
 	 */
 	private function initialize() {
 		new Custom_Post_Types();
+<<<<<<< HEAD
 		new Cron_Handler();
+=======
+
+		// Schedule a cronjob to pre cache all jobs.
+		if ( ! wp_next_scheduled( 'loxo_synchronize_all_jobs' ) ) {
+			wp_schedule_single_event( time() + 600, 'loxo_synchronize_all_jobs' );
+		}
+>>>>>>> master
 
 		new Frontend();
 

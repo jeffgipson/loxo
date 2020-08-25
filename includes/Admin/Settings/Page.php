@@ -58,7 +58,10 @@ class Page {
 			exit;
 		}
 
+<<<<<<< HEAD:includes/Admin/Settings/Page.php
 		// Synchronize all jobs.
+=======
+>>>>>>> master:includes/Admin/Page/Settings.php
 		if ( isset( $_REQUEST['action'] ) && 'synchronize' === $_REQUEST['action'] ) {
 			if ( ! wp_verify_nonce( $_REQUEST['_wpnonce'], 'loxo_synchronize' ) ) {
 				wp_die( __( 'Cheating huh?' ) );
@@ -66,11 +69,16 @@ class Page {
 
 			$synchronizer = new \Loxo\Synchronizer();
 			$synchronizer->synchronize_jobs();
+<<<<<<< HEAD:includes/Admin/Settings/Page.php
+=======
+			#$synchronizer->display_logs();
+>>>>>>> master:includes/Admin/Page/Settings.php
 
 			wp_redirect( admin_url( 'options-general.php?page=loxo-settings&synchronized=true' ) );
 			exit;
 		}
 
+<<<<<<< HEAD:includes/Admin/Settings/Page.php
 		// Delete everything.
 		if ( isset( $_REQUEST['action'] ) && 'delete_all' === $_REQUEST['action'] ) {
 			if ( ! wp_verify_nonce( $_REQUEST['_wpnonce'], 'loxo_delete_all' ) ) {
@@ -84,6 +92,8 @@ class Page {
 			exit;
 		}
 
+=======
+>>>>>>> master:includes/Admin/Page/Settings.php
 		// Schedule rewrite rules regeneration.
 		if ( isset( $_REQUEST['settings-updated'] ) ) {
 			update_option( 'loxo_flush_rewrite_rules', time() );
@@ -230,7 +240,6 @@ class Page {
             )
         );
 
-		/*
 		$job_statuses = loxo_api_get_job_statuses();
 		if ( ! is_wp_error( $job_statuses ) ) {
 			$job_statuses_options = array( '' => __( 'All' ) );
@@ -247,7 +256,6 @@ class Page {
 				'options' => $job_statuses_options
 			);
 		}
-		*/
 
         return $settings_fields;
     }
@@ -257,9 +265,12 @@ class Page {
 		#$synchronizer->sunc_jobs();
 		#$synchronizer->display_logs();
 
+<<<<<<< HEAD:includes/Admin/Settings/Page.php
 		#$post_type_object = get_post_type_object( 'loxo_job' );
 		#Utils::d( $post_type_object->cap );
 
+=======
+>>>>>>> master:includes/Admin/Page/Settings.php
 		?>
 		<div class="wrap loxo-wrap">
 			<h1><?php _e( 'Loxo Settings', 'loxo' ) ?></h1>
@@ -310,6 +321,19 @@ class Page {
 							'_wpnonce' => wp_create_nonce( 'loxo_delete_all' )
 						)
 					); ?>"><?php _e( 'Delete All', 'loxo' ); ?></a>
+				</p>
+
+				<p>
+					<?php
+					_e(
+						'All jobs are stored locally for quick access. You can synchronize jobs from loxo to local storage using button below', 'loxo'
+					);
+					?></br/></br/><a class="button button-primary" href="<?php echo add_query_arg(
+						array(
+							'action' => 'synchronize',
+							'_wpnonce' => wp_create_nonce( 'loxo_synchronize' )
+						)
+					); ?>"><?php _e( 'Synchronize', 'loxo' ); ?></a>
 				</p>
 
 				<?php if ( 'yes' === get_option( 'loxo_enable_sitemap' ) ) : ?>
