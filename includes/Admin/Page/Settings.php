@@ -1,6 +1,7 @@
 <?php
 namespace Loxo\Admin\Page;
 
+use Loxo\Utils;
 use Loxo\Admin\WP_Settings_Api;
 
 /**
@@ -57,6 +58,19 @@ class Settings {
 			exit;
 		}
 
+		if ( isset( $_REQUEST['action'] ) && 'synchronize' === $_REQUEST['action'] ) {
+			if ( ! wp_verify_nonce( $_REQUEST['_wpnonce'], 'loxo_synchronize' ) ) {
+				wp_die( __( 'Cheating huh?' ) );
+			}
+
+			$synchronizer = new \Loxo\Synchronizer();
+			$synchronizer->synchronize_jobs();
+			#$synchronizer->display_logs();
+
+			wp_redirect( admin_url( 'options-general.php?page=loxo-settings&synchronized=true' ) );
+			exit;
+		}
+
 		// Schedule rewrite rules regeneration.
 		if ( isset( $_REQUEST['settings-updated'] ) ) {
 			update_option( 'loxo_flush_rewrite_rules', time() );
@@ -91,6 +105,14 @@ class Settings {
     public function get_settings_fields() {
         $settings_fields = array(
             'api' => array(
+				array(
+                    'id'                => 'loxo_agency_key',
+                    'name'              => 'loxo_agency_key',
+                    'label'             => __( 'Agency Key', 'loxo' ),
+					'desc'				=> __( 'Contact loxo support to get this information.', 'loxo' ),
+                    'type'              => 'text',
+                    'sanitize_callback' => 'sanitize_text_field'
+                ),
                 array(
                     'id'                => 'loxo_api_username',
                     'name'              => 'loxo_api_username',
@@ -107,14 +129,6 @@ class Settings {
                     'type'              => 'text',
                     'sanitize_callback' => 'sanitize_text_field'
                 ),
-				array(
-                    'id'                => 'loxo_agency_key',
-                    'name'              => 'loxo_agency_key',
-                    'label'             => __( 'Agency Key', 'loxo' ),
-					'desc'				=> __( 'Contact loxo support to get this information.', 'loxo' ),
-                    'type'              => 'text',
-                    'sanitize_callback' => 'sanitize_text_field'
-                ),
             ),
             'general' => array(
                 array(
@@ -123,6 +137,15 @@ class Settings {
                     'label'             => __( 'Listing Page', 'loxo' ),
 					'desc'				=> __( 'Job listing will be automatically displayed on this page. Also, single job pages will be generated using this page url.', 'loxo' ),
                     'type'              => 'pages'
+                ),
+				array(
+                    'id'                => 'loxo_listings_per_page',
+                    'name'              => 'loxo_listings_per_page',
+					'label'             => __( 'Listings Per Page', 'loxo' ),
+					'desc'				=> __( 'Number of jobs to display per page while paginating', 'loxo' ),
+					'type'              => 'text',
+					'default'			=> '10',
+                    'sanitize_callback' => 'sanitize_text_field'
                 ),
 				array(
                     'id'                => 'loxo_job_expiration_custom_field',
@@ -178,7 +201,6 @@ class Settings {
             )
         );
 
-		/*
 		$job_statuses = loxo_api_get_job_statuses();
 		if ( ! is_wp_error( $job_statuses ) ) {
 			$job_statuses_options = array( '' => __( 'All' ) );
@@ -186,20 +208,24 @@ class Settings {
 				$job_statuses_options[ $job_status['id'] ] = $job_status['name'];
 			}
 
-			$settings_fields['general'][] = array(
-				'id'      => 'loxo_job_status_id',
-				'name'    => 'loxo_job_status_id',
-				'label'   => __( 'Jobs to display (by status)', 'loxo' ),
+			$settings_fields['api'][] = array(
+				'id'      => 'loxo_active_job_status_id',
+				'name'    => 'loxo_active_job_status_id',
+				'label'   => __( 'Active Job Status', 'loxo' ),
+				'desc'	  => __( 'Only active jobs are displayed.', 'loxo' ),
 				'type'    => 'select',
 				'options' => $job_statuses_options
 			);
 		}
-		*/
 
         return $settings_fields;
     }
 
 	public function render_page() {
+		#$synchronizer = new \Loxo\Synchronizer();
+		#$synchronizer->sunc_jobs();
+		#$synchronizer->display_logs();
+
 		?>
 		<div class="wrap loxo-wrap">
 			<h1><?php _e( 'Loxo Settings', 'loxo' ) ?></h1>
@@ -216,6 +242,19 @@ class Settings {
 							'_wpnonce' => wp_create_nonce( 'loxo_clear_cache' )
 						)
 					); ?>"><?php _e( 'Clear Cache', 'loxo' ); ?></a>
+				</p>
+
+				<p>
+					<?php
+					_e(
+						'All jobs are stored locally for quick access. You can synchronize jobs from loxo to local storage using button below', 'loxo'
+					);
+					?></br/></br/><a class="button button-primary" href="<?php echo add_query_arg(
+						array(
+							'action' => 'synchronize',
+							'_wpnonce' => wp_create_nonce( 'loxo_synchronize' )
+						)
+					); ?>"><?php _e( 'Synchronize', 'loxo' ); ?></a>
 				</p>
 
 				<?php if ( 'yes' === get_option( 'loxo_enable_sitemap' ) ) : ?>

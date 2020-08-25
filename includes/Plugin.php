@@ -63,7 +63,8 @@ final class Plugin {
 
 		add_action( 'init', array( $this, 'maybe_flush_rewrite_rules' ), 20 );
 		add_action( 'init', array( $this, 'load_plugin_translations' ) );
-		add_action( 'loxo_pre_cache_all_jobs_hook', array( $this, 'pre_cache_all_jobs' ) );
+		add_action( 'loxo_synchronize_all_jobs', array( $this, 'synchronize_all_jobs' ) );
+		add_action( 'loxo_synchronize_single_job', array( $this, 'synchronize_single_job' ) );
 	}
 
 	/**
@@ -80,18 +81,31 @@ final class Plugin {
 	/**
 	 * Pre cache all jobs for better performance.
 	 */
-	public function pre_cache_all_jobs() {
-		loxo_clear_all_cache();
-		loxo_get_all_jobs();
+	public function synchronize_all_jobs() {
+		$synchronizer = new Synchronizer();
+		$synchronizer->synchronize_jobs();
+	}
+
+	/**
+	 * Pre cache all jobs for better performance.
+	 */
+	public function synchronize_single_job( $job_id ) {
+		$job_data = loxo_api_get_job( $job_id, 0 );
+		if ( ! is_wp_error( $job_data ) ) {
+			$synchronizer = new Synchronizer();
+			$synchronizer->synchronize_job( $job_data );
+		}
 	}
 
 	/**
 	 * Initialize the plugin
 	 */
 	private function initialize() {
+		new Custom_Post_Types();
+
 		// Schedule a cronjob to pre cache all jobs.
-		if ( ! wp_next_scheduled( 'loxo_pre_cache_all_jobs_hook' ) ) {
-			wp_schedule_single_event( time() + 240, 'loxo_pre_cache_all_jobs_hook' );
+		if ( ! wp_next_scheduled( 'loxo_synchronize_all_jobs' ) ) {
+			wp_schedule_single_event( time() + 600, 'loxo_synchronize_all_jobs' );
 		}
 
 		new Frontend();

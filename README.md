@@ -10,3 +10,4 @@ Display jobs from your loxo account on your wordpress website.
 * Job directory page.
 * Single job page.
 * Jobs sitemap.
+* Job Schema.

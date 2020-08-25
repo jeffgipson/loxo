@@ -1,6 +1,4 @@
 <?php
-$job_inactive = ( ! isset( $job['status'] ) || loxo_api_get_active_job_status_id() !== $job['status']['id'] );
-
 if ( get_option( 'loxo_listing_page_id' ) ) {
 	printf(
 		'<p><a href="%s"><i class="fa fa-chevron-left"></i> %s</a></p>',
@@ -9,26 +7,37 @@ if ( get_option( 'loxo_listing_page_id' ) ) {
 	);
 }
 
+/*
+echo '## DEBUG ## job id: ';
+echo $local_job->get_id();
+if ( $local_job->get_description() ) {
+	echo ' description: local';
+} else {
+	echo ' description: api';
+}
+*/
+
 echo '<div class="loxo-single-job">';
 	echo '<h1 class="job-title">';
-		echo $job['title'];
+		echo $local_job->get_name();
 	echo '</h1>';
 
 	echo '<dl class="job-meta">';
-		if ( ! empty( $job['salary'] ) ) {
+		if ( ! empty( $local_job->get_salary() ) ) {
 			echo '<dt class="job-salary">' . __( 'Compensation', 'loxo' ) . '</dt>';
-			echo '<dd class="job-salary">' . $job['salary'] . '</dd>';
+			echo '<dd class="job-salary">' . loxo_salary( $local_job->get_salary() ) . '</dd>';
 		}
 
 		echo '<dt class="job-type">' . __( 'Type', 'loxo' ) . '</dt>';
-		echo '<dd class="job-type">' . $job['job_type']['name'] . '</dd>';
+		echo '<dd class="job-type">' . $local_job->get_type() . '</dd>';
 
 		$locations = array();
-		if ( ! empty( $job['city'] ) ) {
-			$locations[] = $job['city'];
+		if ( ! empty( $local_job->get_city() ) ) {
+			$locations[] = $local_job->get_city();
 		}
-		if ( ! empty( $job['state_code'] ) ) {
-			$locations[] = $job['state_code'];
+		if ( $local_job->get_state_id() ) {
+			$state = new \Loxo\Job_State\Data( $local_job->get_state_id() );
+			$locations[] = $state->get_name();
 		}
 		if ( ! empty( $locations ) ) {
 			echo '<dt class="job-location">' . __( 'Location', 'loxo' ) . '</dt>';
@@ -38,30 +47,36 @@ echo '<div class="loxo-single-job">';
 	?>
 	<div class="job-content">
 		<div class="job-description">
-			<?php echo loxo_sanitize_job_description( $job['description'] ); ?>
+			<?php 
+			if ( $local_job->get_description() ) {
+				echo loxo_sanitize_job_description( $local_job->get_description() );
+			} else {
+				echo loxo_sanitize_job_description( $job['description'] );
+			}
+			?>
 		</div>
 		<div class="job-apply">
-			<?php if ( ! $job_inactive ) : ?>
+			<?php if ( 'publish' === $local_job->get_status() ) : ?>
 			<div class="loxo-job-share-icons">
 				<?php
 					printf(
 						'<a href="http://www.facebook.com/sharer.php?u=%s" title="%s"><i class="fa fa-facebook"></i></a>',
-						loxo_get_job_url( $job['id'], $job['title'] ),
+						loxo_get_job_url( $local_job->get_job_id(), $local_job->get_name() ),
 						__( 'Share on Facebook', 'loxo' )
 					);
 					printf(
 						'<a href="https://twitter.com/share?url=%s" title="%s"><i class="fa fa-twitter"></i></a>',
-						loxo_get_job_url( $job['id'], $job['title'] ),
+						loxo_get_job_url( $local_job->get_job_id(), $local_job->get_name() ),
 						__( 'Share on Twitter', 'loxo' )
 					);
 					printf(
 						'<a href="http://www.linkedin.com/shareArticle?mini=true&url=%s" title="%s"><i class="fa fa-linkedin"></i></a>',
-						loxo_get_job_url( $job['id'], $job['title'] ),
+						loxo_get_job_url( $local_job->get_job_id(), $local_job->get_name() ),
 						__( 'Share on LinkedIn', 'loxo' )
 					);
 					printf(
 						'<a href="mailto:?subject=I wanted you to check this job&amp;body=Check out this job %s" title="%s"><i class="fa fa-envelope"></i></a>',
-						loxo_get_job_url( $job['id'], $job['title'] ),
+						loxo_get_job_url( $local_job->get_job_id(), $local_job->get_name() ),
 						__( 'Share by Email', 'loxo' )
 					);
 				?>
@@ -78,7 +93,7 @@ echo '<div class="loxo-single-job">';
 				echo '</div>';
 
 				$show_form = false;
-			} elseif ( ! isset( $job['status'] ) || loxo_api_get_active_job_status_id() !== $job['status']['id'] ) {
+			} elseif ( 'publish' !== $local_job->get_status() ) {
 				echo '<div class="loxo-alert loxo-alert-error loxo-job-applied">';
 				echo '<i class="fa fa-exclamation-triangle alert-icon"></i>';
 				echo '<div class="alert-heading">' . __( 'Job Closed.', 'loxo' ) . '</div>';
@@ -129,9 +144,9 @@ echo '<div class="loxo-single-job">';
 				</div>
 				<div class="field-row">
 					<input type="submit" value="<?php _e( 'Apply', 'loxo' ); ?>" />
-					<input type="hidden" name="job_id" value="<?php echo $job['id']; ?>" />
+					<input type="hidden" name="job_id" value="<?php echo $local_job->get_job_id(); ?>" />
 					<input type="hidden" name="action" value="loxo_apply_to_job" />
-					<?php wp_nonce_field( 'loxo-apply-to-job-' . $job['id'] ); ?>
+					<?php wp_nonce_field( 'loxo-apply-to-job-' . $local_job->get_job_id() ); ?>
 				</div>
 			</form>
 			<?php endif; ?>
