@@ -24,6 +24,10 @@ function loxo_get_salary_unit( $salary ) {
 	return $unit_text;
 }
 
+function loxo_calculate_job_expiration( $date_posted, $format = 'Y-m-d' ) {
+	return gmdate( $format, strtotime( $date_posted ) + ( DAY_IN_SECONDS * get_option( 'loxo_default_job_validity_days', 180 ) ) );
+}
+
 function loxo_sanitize_job_description( $desc ) {
 	$desc = wpautop( $desc );
 	$desc = str_replace(

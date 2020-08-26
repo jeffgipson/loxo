@@ -30,20 +30,13 @@ class Frontend {
 	 */
 	public function register_scripts() {
 		wp_register_style( 'loxo-front', LOXO_URL . 'assets/css/front.css' );
-		wp_register_script( 'loxo-front', LOXO_URL . 'assets/js/front.js', array( 'jquery' ) );
 	}
 
 	/**
 	 * Adds plugin action links.
 	 */
 	public function enqueue_scripts() {
-		wp_localize_script( 'loxo-front', 'loxo', array(
-			'notMatch' => __( 'No job matched your selection.' ),
-			'noItems' => __( 'No jobs available right now.' )
-		) );
-
 		wp_enqueue_style( 'loxo-front' );
-		#wp_enqueue_script( 'loxo-front' );
 	}
 
 	/**

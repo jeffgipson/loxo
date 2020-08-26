@@ -77,11 +77,11 @@ class Job_Metadata {
 		$date_posted = gmdate( 'Y-m-d', strtotime( $this->job->get_date_published() ) );
 
 		// Valid through.
-		$expiration_field = get_option( 'loxo_job_expiration_custom_field' );
+		// $expiration_field = get_option( 'loxo_job_expiration_custom_field' );
 		if ( $this->job->get_date_expires() ) {
 			$valid_through = gmdate( 'Y-m-d', strtotime( $this->job->get_date_expires() ) );
 		} else {
-			$valid_through = gmdate( 'Y-m-d', strtotime( $date_posted ) + ( DAY_IN_SECONDS * get_option( 'loxo_default_job_validity_days', 180 ) ) );
+			$valid_through = loxo_calculate_job_expiration( $date_posted );
 		}
 
 		// Default employmentType is full time, change if needed.

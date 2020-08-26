@@ -18,4 +18,37 @@
 	.loxo-form{
 		overflow: hidden;
 	}
+
+	.post-type-loxo_job .wp-list-table .column-taxonomy-loxo_job_cat,
+	.post-type-loxo_job .wp-list-table .column-taxonomy-loxo_job_state,
+	.post-type-loxo_job .wp-list-table .column-location,
+	.post-type-loxo_job .wp-list-table .column-address{
+		width: 100px;
+	}
+
+	.post-type-loxo_job .wp-list-table .column-salary,
+	.post-type-loxo_job .wp-list-table .column-published,
+	.post-type-loxo_job .wp-list-table .column-expires{
+		width: 100px;
+	}
+}
+
+.post-type-loxo_job .wp-list-table .ui-datepicker-trigger,
+.post-type-loxo_job .wp-list-table .loxo-expiration-datepicker{
+	padding: 0;
+	border: none;
+	min-height: 0;
+	line-height: normal;
+	outline: none;
+	box-shadow: none;
+	background-color: transparent;
+	font-size: 13px;
+	line-height: 1.5em;
+}
+.post-type-loxo_job .wp-list-table .loxo-expiration-datepicker{
+	width: 100%;
+}
+.post-type-loxo_job .wp-list-table .ui-datepicker-trigger{
+	color: #0073aa;
+	cursor: pointer;
 }

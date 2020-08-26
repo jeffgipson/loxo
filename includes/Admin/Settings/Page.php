@@ -266,8 +266,8 @@ class Page {
 		#$synchronizer->sunc_jobs();
 		#$synchronizer->display_logs();
 
-		#$post_type_object = get_post_type_object( 'loxo_job' );
-		#Utils::d( $post_type_object->cap );
+		$post_type_object = get_post_type_object( 'loxo_job' );
+		Utils::p( $post_type_object->cap );
 
 		?>
 		<div class="wrap loxo-wrap">
