@@ -147,19 +147,22 @@ class Frontend {
 			$content = ob_get_clean();
 
 		} else {
-		
+			$total_jobs = $this->get_total_jobs_count();
+
 			$job_category_terms = get_terms( array(
 				'taxonomy' => 'loxo_job_cat'
 			) );
 			$job_categories = array(
 				array(
 					'name' => 'Any',
-					'count' => $this->get_total_jobs_count()
+					'value' => 'Any',
+					'count' => $total_jobs
 				)
 			);
 			foreach ( $job_category_terms as $job_category_term ) {
 				$job_categories[] = array(
 					'name' => $job_category_term->name,
+					'value' => $job_category_term->name,
 					'count' => $job_category_term->count
 				);
 			}
@@ -170,16 +173,21 @@ class Frontend {
 			$job_states = array(
 				array(
 					'name' => 'Any',
-					'count' => $this->get_total_jobs_count()
+					'value' => 'Any',
+					'count' => $total_jobs
 				)
 			);
 
 			foreach ( $job_state_terms as $job_state_term ) {
 				$job_states[] = array(
 					'name' => $job_state_term->name,
+					'value' => $job_state_term->name,
 					'count' => $job_state_term->count
 				);
 			}
+
+			$filtered = false;
+			$base_url = get_permalink();
 
 			$selected_job_category = 'Any';
 			if ( isset( $_REQUEST['job_category'] ) ) {
@@ -191,11 +199,10 @@ class Frontend {
 				$selected_job_state = $_REQUEST['job_state'];
 			}
 
-			$tax_query = array(
-				'relation' => 'AND'
-			);
+			$tax_query = array();
 
 			if ( 'Any' !== $selected_job_category ) {
+				$filtered = true;
 				$tax_query[] = array(
 					'taxonomy' => 'loxo_job_cat',
 					'field' => 'name',
@@ -204,6 +211,7 @@ class Frontend {
 			}
 
 			if ( 'Any' !== $selected_job_state ) {
+				$filtered = true;
 				$tax_query[] = array(
 					'taxonomy' => 'loxo_job_state',
 					'field' => 'name',
@@ -211,7 +219,9 @@ class Frontend {
 				);
 			}
 
-			# \Loxo\Utils::d( $tax_query );
+			if ( ! empty( $tax_query ) ) {
+				$tax_query['relation'] = 'AND';
+			}
 
 			$per_page = (int) get_option( 'loxo_listings_per_page', 10 );
 			if ( ! $per_page ) {
@@ -226,6 +236,8 @@ class Frontend {
 				'paged' => $paged,
 				'tax_query' => $tax_query
 			));
+
+			$found_jobs = $jobs_query->found_posts;
 
 			$job_posts = $jobs_query->get_posts();
 

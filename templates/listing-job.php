@@ -54,9 +54,11 @@ printf(
 			echo '</span>';
 		}
 
+		/*
 		echo '<span class="job-type">';
 			echo $job->get_type();
 		echo '</span>';
+		*/
 
 	echo '</div>';
 
