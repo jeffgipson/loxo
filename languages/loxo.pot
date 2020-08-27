@@ -10,47 +10,55 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2020-08-25 20:38+0000\n"
+"POT-Creation-Date: 2020-08-27 05:44+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: Loco https://localise.biz/\n"
 "X-Domain: loxo\n"
 "Language: \n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;"
 
-#: includes/Custom_Post_Types.php:68
+#: includes/Custom_Post_Types.php:72
 msgid "Loxo Jobs"
 msgstr ""
 
-#: includes/Custom_Post_Types.php:69
+#: includes/Custom_Post_Types.php:73
 msgid "All Jobs"
 msgstr ""
 
-#: includes/Frontend.php:143
+#: includes/Frontend.php:137
 #, php-format
 msgid "Error: %s"
 msgstr ""
 
-#: includes/Frontend.php:272
+#: includes/Frontend.php:278
 msgid "Cheating huh?"
 msgstr ""
 
-#: includes/Frontend.php:276
+#: includes/Frontend.php:282
 msgid "Cheating hard?"
 msgstr ""
 
-#: includes/Frontend.php:280
+#: includes/Frontend.php:286
 msgid "Please complete all fields, and submit again."
 msgstr ""
 
-#: includes/functions.php:206
+#: includes/functions.php:219
 msgid "Could not connect to loxo. Missing api credentials."
 msgstr ""
 
-#: includes/functions.php:240 includes/functions.php:242
+#: includes/functions.php:256
+msgid "Wrong Agency Key."
+msgstr ""
+
+#: includes/functions.php:258
+msgid "Wrong API Credentials."
+msgstr ""
+
+#: includes/functions.php:260
 msgid "Resource not found."
 msgstr ""
 
-#: includes/functions.php:270
+#: includes/functions.php:295
 msgid "Could not apply on job. Missing api credentials."
 msgstr ""
 
@@ -116,7 +124,15 @@ msgstr ""
 msgid "Filter"
 msgstr ""
 
-#: templates/listing-content.php:69
+#: templates/listing-content.php:49
+msgid "Reset filter"
+msgstr ""
+
+#: templates/listing-content.php:49
+msgid "Reset"
+msgstr ""
+
+#: templates/listing-content.php:84
 msgid "No jobs available."
 msgstr ""
 
@@ -128,229 +144,290 @@ msgstr ""
 msgid "Compensation"
 msgstr ""
 
-#: templates/single-job-content.php:31
-msgid "Type"
-msgstr ""
-
-#: templates/single-job-content.php:43
+#: templates/single-job-content.php:45 includes/Admin/Jobs.php:50
 msgid "Location"
 msgstr ""
 
-#: templates/single-job-content.php:65
+#: templates/single-job-content.php:67
 msgid "Share on Facebook"
 msgstr ""
 
-#: templates/single-job-content.php:70
+#: templates/single-job-content.php:72
 msgid "Share on Twitter"
 msgstr ""
 
-#: templates/single-job-content.php:75
+#: templates/single-job-content.php:77
 msgid "Share on LinkedIn"
 msgstr ""
 
-#: templates/single-job-content.php:80
+#: templates/single-job-content.php:82
 msgid "Share by Email"
 msgstr ""
 
-#: templates/single-job-content.php:91
+#: templates/single-job-content.php:93
 msgid "Congratulations!!!"
 msgstr ""
 
-#: templates/single-job-content.php:92
+#: templates/single-job-content.php:94
 msgid "You have successfully applied for this job."
 msgstr ""
 
-#: templates/single-job-content.php:99
+#: templates/single-job-content.php:101
 msgid "Job Closed."
 msgstr ""
 
-#: templates/single-job-content.php:108
+#: templates/single-job-content.php:110
 msgid "Could not apply for job. Please fix the error before resubmitting."
 msgstr ""
 
-#: templates/single-job-content.php:120 templates/single-job-content.php:146
-msgid "Apply"
+#: templates/single-job-content.php:122
+msgid "Apply for this position"
 msgstr ""
 
-#: templates/single-job-content.php:122
+#: templates/single-job-content.php:124
 msgid "Name:"
 msgstr ""
 
-#: templates/single-job-content.php:128
+#: templates/single-job-content.php:130
 msgid "Email:"
 msgstr ""
 
-#: templates/single-job-content.php:134
+#: templates/single-job-content.php:136
 msgid "Phone:"
 msgstr ""
 
-#: templates/single-job-content.php:140
+#: templates/single-job-content.php:142
 msgid "Resume:"
 msgstr ""
 
-#: includes/Admin/Jobs.php:33 includes/Admin/Settings/Page.php:291
+#: templates/single-job-content.php:148
+msgid "Apply"
+msgstr ""
+
+#: includes/Admin/Jobs.php:46
+msgid "Job ID"
+msgstr ""
+
+#: includes/Admin/Jobs.php:47
+msgid "Categories"
+msgstr ""
+
+#: includes/Admin/Jobs.php:48
+msgid "States"
+msgstr ""
+
+#: includes/Admin/Jobs.php:49
+msgid "Address"
+msgstr ""
+
+#: includes/Admin/Jobs.php:51
+msgid "Salary"
+msgstr ""
+
+#: includes/Admin/Jobs.php:52
+msgid "Published"
+msgstr ""
+
+#: includes/Admin/Jobs.php:53
+msgid "Expires"
+msgstr ""
+
+#: includes/Admin/Jobs.php:152
 msgid "Synchronize"
 msgstr ""
 
-#: includes/Admin/Jobs.php:38
+#: includes/Admin/Jobs.php:157
 msgid "View"
 msgstr ""
 
-#: includes/Admin/Main.php:47 includes/Admin/Settings/Page.php:38
+#: includes/Admin/Main.php:48 includes/Admin/Settings/Page.php:38
 msgid "Settings"
 msgstr ""
 
-#: includes/Admin/Settings/Page.php:37 includes/Admin/Settings/Page.php:265
+#: includes/Admin/Notices.php:39
+#, php-format
+msgid ""
+"Loxo Error: Missing api credentials. Please update your loxo <a href=\"%s\">"
+"API Settings</a>"
+msgstr ""
+
+#: includes/Admin/Notices.php:52
+msgid "Settings updated."
+msgstr ""
+
+#: includes/Admin/Notices.php:62
+msgid "Job synchronized."
+msgstr ""
+
+#: includes/Admin/Settings/Page.php:37 includes/Admin/Settings/Page.php:297
 msgid "Loxo Settings"
 msgstr ""
 
-#: includes/Admin/Settings/Page.php:104
+#: includes/Admin/Settings/Page.php:57
+msgid "Cache cleared."
+msgstr ""
+
+#: includes/Admin/Settings/Page.php:72
+msgid "Synchronizion failed."
+msgstr ""
+
+#: includes/Admin/Settings/Page.php:75
+msgid "Synchronizion completed"
+msgstr ""
+
+#: includes/Admin/Settings/Page.php:92
+msgid "Synchronizion scheduled"
+msgstr ""
+
+#: includes/Admin/Settings/Page.php:106
+msgid "All data deleted"
+msgstr ""
+
+#: includes/Admin/Settings/Page.php:129
 msgid "API Settings"
 msgstr ""
 
-#: includes/Admin/Settings/Page.php:108
+#: includes/Admin/Settings/Page.php:133
 msgid "General Settings"
 msgstr ""
 
-#: includes/Admin/Settings/Page.php:112
+#: includes/Admin/Settings/Page.php:137
 msgid "Synchronizer Setting"
 msgstr ""
 
-#: includes/Admin/Settings/Page.php:116
+#: includes/Admin/Settings/Page.php:141
 msgid "SEO Settings"
 msgstr ""
 
-#: includes/Admin/Settings/Page.php:128
+#: includes/Admin/Settings/Page.php:153
 msgid "Agency Key"
 msgstr ""
 
-#: includes/Admin/Settings/Page.php:129 includes/Admin/Settings/Page.php:137
-#: includes/Admin/Settings/Page.php:145
+#: includes/Admin/Settings/Page.php:154 includes/Admin/Settings/Page.php:162
+#: includes/Admin/Settings/Page.php:170
 msgid "Contact loxo support to get this information."
 msgstr ""
 
-#: includes/Admin/Settings/Page.php:136
+#: includes/Admin/Settings/Page.php:161
 msgid "API Username"
 msgstr ""
 
-#: includes/Admin/Settings/Page.php:144
+#: includes/Admin/Settings/Page.php:169
 msgid "API Password"
 msgstr ""
 
-#: includes/Admin/Settings/Page.php:154
+#: includes/Admin/Settings/Page.php:179
 msgid "Listing Page"
 msgstr ""
 
-#: includes/Admin/Settings/Page.php:155
+#: includes/Admin/Settings/Page.php:180
 msgid ""
 "Job listing will be automatically displayed on this page. Also, single job "
 "pages will be generated using this page url."
 msgstr ""
 
-#: includes/Admin/Settings/Page.php:161
+#: includes/Admin/Settings/Page.php:186
 msgid "Listings Per Page"
 msgstr ""
 
-#: includes/Admin/Settings/Page.php:162
+#: includes/Admin/Settings/Page.php:187
 msgid "Number of jobs to display per page while paginating"
 msgstr ""
 
-#: includes/Admin/Settings/Page.php:170
-msgid "Name of the job expiration custom field"
-msgstr ""
-
-#: includes/Admin/Settings/Page.php:171
-msgid ""
-"If loxo has enabled a custom date field for you that you would use for job "
-"expiration/validthrough date, enter the field name here."
-msgstr ""
-
-#: includes/Admin/Settings/Page.php:178
+#: includes/Admin/Settings/Page.php:204
 msgid "Default job validity (in days)"
 msgstr ""
 
-#: includes/Admin/Settings/Page.php:179
+#: includes/Admin/Settings/Page.php:205
 msgid ""
 "If job expiration custom field comes empty, a validThrough date will be "
 "calculated in conjunction with job publication date."
 msgstr ""
 
-#: includes/Admin/Settings/Page.php:188
+#: includes/Admin/Settings/Page.php:214
 msgid "Jobs Update Frequency (in minutes)"
 msgstr ""
 
-#: includes/Admin/Settings/Page.php:189
+#: includes/Admin/Settings/Page.php:215
 msgid "How frequently jobs should be updated."
 msgstr ""
 
-#: includes/Admin/Settings/Page.php:199
+#: includes/Admin/Settings/Page.php:225
 msgid "Hiring Company Name"
 msgstr ""
 
-#: includes/Admin/Settings/Page.php:200
+#: includes/Admin/Settings/Page.php:226
 msgid "Used on single job company name schema."
 msgstr ""
 
-#: includes/Admin/Settings/Page.php:208
+#: includes/Admin/Settings/Page.php:234
 msgid "Hiring Company Url"
 msgstr ""
 
-#: includes/Admin/Settings/Page.php:209
+#: includes/Admin/Settings/Page.php:235
 msgid "Used on single job company sameAs schema."
 msgstr ""
 
-#: includes/Admin/Settings/Page.php:217
+#: includes/Admin/Settings/Page.php:243
 msgid "Hiring Company Logo"
 msgstr ""
 
-#: includes/Admin/Settings/Page.php:218
+#: includes/Admin/Settings/Page.php:244
 msgid "Used on single job company logo schema."
 msgstr ""
 
-#: includes/Admin/Settings/Page.php:225
+#: includes/Admin/Settings/Page.php:251
 msgid "Enable Jobs Sitemap?"
 msgstr ""
 
-#: includes/Admin/Settings/Page.php:226
+#: includes/Admin/Settings/Page.php:252
 msgid "If enabled, a sitemap will be created for your jobs"
 msgstr ""
 
-#: includes/Admin/Settings/Page.php:269
+#: includes/Admin/Settings/Page.php:301
 msgid "Clear cached data."
 msgstr ""
 
-#: includes/Admin/Settings/Page.php:277
+#: includes/Admin/Settings/Page.php:309
 msgid "Clear Cache"
 msgstr ""
 
-#: includes/Admin/Settings/Page.php:283
+#: includes/Admin/Settings/Page.php:315
 msgid ""
 "All jobs are stored locally for quick access. You can synchronize jobs from "
 "loxo to local storage using button below"
 msgstr ""
 
-#: includes/Admin/Settings/Page.php:304
+#: includes/Admin/Settings/Page.php:323
+msgid "Synchronize now"
+msgstr ""
+
+#: includes/Admin/Settings/Page.php:330
+msgid "Shedule"
+msgstr ""
+
+#: includes/Admin/Settings/Page.php:343
 msgid "Delete all jobs, categories & states from local storate"
 msgstr ""
 
-#: includes/Admin/Settings/Page.php:312
+#: includes/Admin/Settings/Page.php:351
 msgid "Delete All"
 msgstr ""
 
-#: includes/Admin/Settings/Page.php:318
+#: includes/Admin/Settings/Page.php:357
 msgid ""
 "A sitemap is automatically generated for all active jobs. It is also added "
 "on the robots.txt file so that search engine both can find it. Click view "
 "sitemap to see how it looks."
 msgstr ""
 
-#: includes/Admin/Settings/Page.php:320
+#: includes/Admin/Settings/Page.php:359
 msgid ""
 "If you have added or deactivated job on loxo, resubmit sitemap to google for "
 "reindexing."
 msgstr ""
 
-#: includes/Admin/Settings/Page.php:321
+#: includes/Admin/Settings/Page.php:360
 msgid "Submit Sitemap to Google"
 msgstr ""
 
