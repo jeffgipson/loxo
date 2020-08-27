@@ -88,8 +88,9 @@ abstract class Base_Termdata extends Base_Data {
 			$data[$key] = $val;
 		}
 
-    $data = $this->pre_set_props($data, $id);
+    	$data = $this->pre_set_props($data, $id);
 		$this->set_props($data);
+		$this->apply_changes();
 		$this->set_object_read(true);
 	}
 

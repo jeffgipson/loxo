@@ -31,7 +31,7 @@ class Custom_Post_Types {
 	 * Disable job creation capability.
 	 */
 	public function job_post_type_args( $args, $post_type ) {
-		if ( 'loxo_job' === $post_type ) {
+		if ( 'loxo_job' === $post_type && ! wp_doing_cron() ) {
 			$args['capabilities'] = array(
 				'create_posts' => 'create_jobs',
 				'edit_post' => 'edit_job',
@@ -50,7 +50,7 @@ class Custom_Post_Types {
 	 * Disable job category/state modification capability.
 	 */
 	public function job_taxonomy_args( $args, $post_type ) {
-		if ( in_array( $post_type, array( 'loxo_job_cat', 'loxo_job_state' ) ) ) {
+		if ( in_array( $post_type, array( 'loxo_job_cat', 'loxo_job_state' ) ) && ! wp_doing_cron() ) {
 			$args['capabilities'] = array(
 				'edit_terms' => 'edit_job_terms',
 				'delete_terms' => 'delete_job_terms'

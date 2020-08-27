@@ -55,6 +55,24 @@ class Synchronizer {
             return false;
         }
 
+        // Debug
+        /*
+        $categories = array();
+        foreach ( $jobs as $job ) {
+            if ( ! empty( $job['categories' ] ) ) {
+                foreach ( $job['categories' ] as $category ) {
+                    if ( ! isset( $categories[ $category['name'] ] ) ) {
+                        $categories[ $category['name'] ] = 1;
+                    } else {
+                        ++ $categories[ $category['name'] ];
+                    }
+                }
+            }
+        }
+        loxo_log( 'All cats', $categories );
+        */
+
+
         if ( $timestamp = wp_next_scheduled( 'loxo_synchronize_jobs' ) ) {
             wp_unschedule_event( $timestamp, 'loxo_synchronize_jobs'  );
         }
@@ -111,7 +129,7 @@ class Synchronizer {
      * Import a job from collection/jobs endpoint.
      */
     public function synchronize_collection_job( $job_data ) {
-        loxo_log( 'Syncronizing collection job', $job_data );
+        #loxo_log( 'Syncronizing collection job', $job_data );
         $slug = 'loxo-job-' . $job_data['id'];
 
         try {
@@ -131,8 +149,6 @@ class Synchronizer {
 
             $job->save();
 
-            loxo_log( 'Job data', $job->get_data() );
-
             if ( ! $job->get_description() ) {
                 // Schedule so that job description gets updated.
                 do_action( 'loxo_schedule_job_synchronization', $job->get_job_id(), 5 );
@@ -141,6 +157,7 @@ class Synchronizer {
             return $job->get_id();
 
         } catch ( \Loxo\Exception\Exception $e ) {
+            loxo_log( 'Job save error', $e->getMessage() );
             return $e->getMessage();
         }
     }
@@ -211,15 +228,15 @@ class Synchronizer {
 					]);
 					$job_category->save();
 					$job_category_ids[] = $job_category->get_id();
-                    loxo_log( 'New category', $job_category->get_data() );
+                    # loxo_log( 'New category', $job_category->get_data() );
 
 				} catch ( \Loxo\Exception\Resource_Exists $e ) {
-                    loxo_log( 'Existing category', $e->getCode() );
+                    # loxo_log( 'Existing category', $e->getCode() );
 					$job_category_ids[] = (int) $e->getCode();
 				} catch ( \Loxo\Exception\Exception $e ) {
 				}
 			}
-		}
+        }
 
         $slug = 'loxo-job-' . $job_data['id'];
 
