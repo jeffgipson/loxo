@@ -145,7 +145,7 @@ echo '<div class="loxo-single-job">';
 					</div>
 				</div>
 				<div class="field-row">
-					<input type="submit" value="<?php _e( 'Apply', 'loxo' ); ?>" />
+					<input type="submit" class="loxo-submit-button" value="<?php _e( 'Apply', 'loxo' ); ?>" />
 					<input type="hidden" name="job_id" value="<?php echo $local_job->get_job_id(); ?>" />
 					<input type="hidden" name="action" value="loxo_apply_to_job" />
 					<?php wp_nonce_field( 'loxo-apply-to-job-' . $local_job->get_job_id() ); ?>

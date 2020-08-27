@@ -1,11 +1,11 @@
 <?php
-namespace Loxo;
-
 /**
- * Main Plugin File.
+ * Loxo main plugin file.
  *
  * @package Loxo
  */
+
+namespace Loxo;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -30,7 +30,7 @@ final class Plugin {
 	 *
 	 * @var string
 	 */
-	public $version = '1.1.1';
+	public $version = '1.1.2';
 
 	/**
 	 * Singleton The reference the *Singleton* instance of this class.

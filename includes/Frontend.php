@@ -19,7 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 class Frontend {
 	public function __construct() {
 		add_action( 'init', array( $this, 'single_job_page_rule' ) );
-		add_action( 'template_redirect', array( $this, 'template_redirect' ), 8 );
+		add_action( 'template_redirect', array( $this, 'template_redirect' ), 80 );
 		add_action( 'query_vars', array( $this, 'job_id_query_vars' ) );
 		add_action( 'save_post_page', array( $this, 'flush_if_listing_page_updated' ) );
 		add_action( 'wp_enqueue_scripts', array( $this, 'register_scripts' ), 5 );
@@ -105,16 +105,20 @@ class Frontend {
 			do_action( 'loxo_schedule_job_synchronization', $job_id, 10 );
 		}
 
-		// Remove Yoast seo metadata.
+		// Remove Yoast Seo metadata.
 		if ( defined( 'WPSEO_VERSION' ) ) {
 			$this->remove_wpseo_metadata();
 		}
 
+		// Disable All in One SEO Pack metadata.
+		#add_filter( 'aiosp_disable', '__return_true' );
+		#add_filter( 'aioseop_title', '__return_empty_string' );
+
+		// Remove default title tag
+		remove_action( 'wp_head', '_wp_render_title_tag', 1 );
+
 		// Add single job metadata + schema.
 		add_action( 'wp_head', array( $this, 'single_job_metadata' ), 1 );
-
-		#echo loxo_sanitize_job_description( $local_job->get_description() );
-		#exit;
 	}
 
 	/**

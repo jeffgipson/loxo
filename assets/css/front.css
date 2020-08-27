@@ -23,6 +23,8 @@
 	border-radius: 3px;
 	border: 1px solid #DDD;
 	box-shadow: none !important;
+	width: 100%;
+	box-sizing: border-box;
 }
 .loxo-form .field-control.select2-container{
 	padding: 0;
@@ -33,6 +35,13 @@
 }
 .loxo-form .control-wrap{
 	padding-top: 12px;
+}
+.loxo-submit-button{
+	border: none;
+	color: #FFF;
+	border-radius: 3px;
+	padding: 12px 22px;
+	background-color: #0264a7;
 }
 
 /* Alert */
@@ -212,7 +221,12 @@
 		align-items: center;
 		justify-content: space-between;
 	}
+	.loxo-jobs .job-header{
+		flex: 1;
+		padding-right: 20px;
+	}
 	.loxo-jobs .job-meta{
+		flex: 0;
 		display: flex;
 		grid-gap: 5px;
 		flex-wrap: nowrap;
