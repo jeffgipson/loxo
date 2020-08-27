@@ -22,16 +22,17 @@ class Main {
 	 */
 	public function __construct() {
 		new Jobs();
+		new Notices();
 		new Settings\Page();
 
-		add_action( 'admin_enqueue_scripts', array( $this, 'register_admin_scripts' ), 5 );
+		add_action( 'admin_enqueue_scripts', array( $this, 'register_scripts' ), 5 );
 		add_action( 'plugin_action_links_' . LOXO_BASENAME, array( $this, 'plugin_action_links' ) );
 	}
 
 	/**
 	 * Register admin assets.
 	 */
-	public function register_admin_scripts() {
+	public function register_scripts() {
 		wp_register_style( 'loxo-admin', LOXO_URL . 'assets/css/admin.css', array( ) );
 		wp_register_script( 'loxo-admin', LOXO_URL . 'assets/js/admin.js' );
 	}
@@ -43,7 +44,7 @@ class Main {
 		$new_links = array();
 		$new_links['settings'] = sprintf(
 			'<a href="%s">%s</a>',
-			admin_url( 'options-general.php?page=loxo-settings' ),
+			admin_url( 'edit.php?post_type=loxo_job&page=loxo-settings' ),
 			__( 'Settings', 'loxo' )
 		);
 

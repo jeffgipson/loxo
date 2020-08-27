@@ -44,13 +44,28 @@
 			</div>
 			<?php endif; ?>
 			<div class="field-row">
-				<input class="sm-button reset-button" type="submit" value="<?php _e( 'Filter', 'loxo' ); ?>" />
+				<input class="loxo-submit-button" type="submit" value="<?php _e( 'Filter', 'loxo' ); ?>" />
+				<?php if ( $filtered ) : ?>
+					<a href="<?php echo $base_url; ?>" class="loxo-reset-button" title="<?php esc_attr_e( 'Reset filter', 'loxo' ); ?>"><?php _e( 'Reset', 'loxo' ); ?></a>
+				<?php endif; ?>
 			</div>
 		</form>
 	</div>
 	<div class="loxo-jobs">
 		<?php
 		if ( ! empty( $jobs ) ) {
+			$showing_min = ( ( $paged - 1 ) * $per_page ) + 1;
+			$showing_max = min( $per_page * $paged, $found_jobs );
+
+			echo '<div class="loxo-jobs-count">';
+				printf( 
+					'Showing %d to %d of %d Jobs', 
+					$showing_min, 
+					$showing_max, 
+					$found_jobs
+				);
+			echo '</div>';
+
 			foreach ( $jobs as $job ) {
 				include 'listing-job.php';
 			}

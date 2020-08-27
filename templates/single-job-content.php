@@ -28,8 +28,10 @@ echo '<div class="loxo-single-job">';
 			echo '<dd class="job-salary">' . loxo_salary( $local_job->get_salary() ) . '</dd>';
 		}
 
+		/*
 		echo '<dt class="job-type">' . __( 'Type', 'loxo' ) . '</dt>';
 		echo '<dd class="job-type">' . $local_job->get_type() . '</dd>';
+		*/
 
 		$locations = array();
 		if ( ! empty( $local_job->get_city() ) ) {
@@ -117,29 +119,29 @@ echo '<div class="loxo-single-job">';
 
 			<?php if ( $show_form ) :	?>
 			<form class="loxo-form loxo-job-apply-form" method="post" enctype="multipart/form-data">
-				<h4><?php _e( 'Apply', 'loxo' ); ?></h4>
+				<h4><?php _e( 'Apply for this position', 'loxo' ); ?></h4>
 				<div class="field-row">
 					<label class="field-label" for="name"><?php _e( 'Name:', 'loxo' ); ?></label>
 					<div class="control-wrap">
-						<input type="text" id="name" name="name" class="field-control" />
+						<input type="text" id="name" name="name" class="field-control" placeholder="<?php esc_attr_e( 'ie: John Doe' ); ?>" required />
 					</div>
 				</div>
 				<div class="field-row">
 					<label class="field-label" for="email"><?php _e( 'Email:', 'loxo' ); ?></label>
 					<div class="control-wrap">
-						<input type="email" id="email" name="email" class="field-control" />
+						<input type="email" id="email" name="email" class="field-control" placeholder="<?php esc_attr_e( 'ie: john-doe@example.com' ); ?>" required />
 					</div>
 				</div>
 				<div class="field-row">
 					<label class="field-label" for="phone"><?php _e( 'Phone:', 'loxo' ); ?></label>
 					<div class="control-wrap">
-						<input type="text" id="phone" name="phone" class="field-control" />
+						<input type="text" id="phone" name="phone" class="field-control" placeholder="<?php esc_attr_e( 'ie: +1 (564) 332-9088' ); ?>" required />
 					</div>
 				</div>
 				<div class="field-row">
 					<label class="field-label" for="resume"><?php _e( 'Resume:', 'loxo' ); ?></label>
 					<div class="control-wrap">
-						<input type="file" id="resume" name="resume" class="field-control" />
+						<input type="file" id="resume" name="resume" class="field-control" required />
 					</div>
 				</div>
 				<div class="field-row">

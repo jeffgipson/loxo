@@ -3,11 +3,7 @@
  * Plugin Name: Loxo
  * Plugin URI: http://linkpas.com/
  * Description: Display jobs from your loxo.co saas application. job listing, job filter, single job details, sitemap, job schema
-<<<<<<< HEAD
- * Version: 1.0.6
-=======
- * Version: 1.0.5
->>>>>>> master
+ * Version: 1.1.0
  * Author: Shazzad Hossain Khan
  * Author URI: https://shazzad.me
  * Requires at least: 5.0
@@ -54,6 +50,17 @@ function loxo() {
  */
 function loxo_activate() {
 	update_option( 'loxo_flush_rewrite_rules', time() );
-	#update_option( 'loxo_register_administrator_capabilities', time() );
 }
 register_activation_hook( __FILE__, 'loxo_activate' );
+
+/**
+ * Unregister cronjob & flush rewrites upon plugin deactivation.
+ */
+function loxo_deactivate() {
+	if ( $timestamp = wp_next_scheduled( 'loxo_synchronize_jobs' ) ) {
+		wp_unschedule_event( $timestamp, 'loxo_synchronize_jobs'  );
+	}
+	wp_clear_scheduled_hook( 'loxo_synchronize_jobs'  );
+	flush_rewrite_rules();
+}
+register_deactivation_hook( __FILE__, 'loxo_deactivate' );

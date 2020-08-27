@@ -2,12 +2,15 @@
 /* Listing Page Content */
 ?>
 <?php
-printf(
-	'<a id="job-%d" href="%s" class="loxo-job">
-	<div class="job-inner">',
-	$job->get_job_id(),
-	loxo_get_job_url( $job->get_job_id(), $job->get_name() )
-);
+echo '<div class="loxo-job">';
+	echo '<div class="job-inner">';
+
+	printf(
+		'<a id="job-%d" href="%s" class="job-link"></a>',
+		$job->get_job_id(),
+		loxo_get_job_url( $job->get_job_id(), $job->get_name() )
+	);
+
 	echo '<div class="job-header">';
 		echo '<div class="job-id">';
 			printf(
@@ -18,6 +21,7 @@ printf(
 		echo '<h3 class="job-title">';
 			echo $job->get_name();
 		echo '</h3>';
+
 		echo '<div class="job-data">';
 			echo '<span class="job-published">';
 				printf(
@@ -49,14 +53,27 @@ printf(
 	echo '<div class="job-meta">';
 		if ( $job->get_salary() ) {
 			echo '<span class="job-salary">';
-				echo $job->get_salary();
+				echo loxo_salary( $job->get_salary() );
 			echo '</span>';
 		}
 
+		/*
 		echo '<span class="job-type">';
 			echo $job->get_type();
 		echo '</span>';
+		*/
 
 	echo '</div>';
 
-echo '</div></a>';
+	if ( $job->get_description() ) {
+		// TODO: Store job summary on post_excerpt rather than parsing description.
+		$summary = loxo_sanitize_job_description( $job->get_description() );
+		$summary = str_replace( "&nbsp;", "", wp_strip_all_tags( $summary ) );
+
+		echo '<div class="job-excerpt">';
+		echo wp_trim_words( $summary, 40, '...' );
+		echo '</div>';
+	}
+
+	echo '</div>';
+echo '</div>';

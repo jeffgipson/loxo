@@ -1,7 +1,7 @@
 <?php
 function loxo_salary( $salary ) {
 	$_salary = preg_replace( '/[^0-9\.]/i', '', trim( $salary ) );
-	return '$ ' . number_format( $_salary, 2, '.', ',' );
+	return '$' . number_format( $_salary, 0, '.', ',' );
 }
 
 function loxo_get_salary_unit( $salary ) {
@@ -22,6 +22,10 @@ function loxo_get_salary_unit( $salary ) {
 	}
 
 	return $unit_text;
+}
+
+function loxo_calculate_job_expiration( $date_posted, $format = 'Y-m-d' ) {
+	return gmdate( $format, strtotime( $date_posted ) + ( DAY_IN_SECONDS * get_option( 'loxo_default_job_validity_days', 180 ) ) );
 }
 
 function loxo_sanitize_job_description( $desc ) {
@@ -90,6 +94,8 @@ function loxo_clear_all_cache() {
 		}
 	}
 
+	delete_option( 'loxo_api_credentials_error' );
+
 	// Clear opcache.
 	if ( function_exists( 'opcache_reset' ) ) {
 		opcache_reset();
@@ -105,7 +111,8 @@ function loxo_get_all_jobs() {
 	$params = array(
 		'page'     => 1,
 		'per_page' => 100,
-		'status' => 'active'
+		'status' => 'active',
+		'published_at_sort' => 'desc'
 	);
 	/*
 	if ( get_option( 'loxo_active_job_status_id' ) ) {
@@ -224,6 +231,9 @@ function loxo_api_get( $path, $params = array(), $ttl = 0, $refresh = false ) {
 	// Do log.
 	loxo_log( 'loxo api request - ' . str_replace( $api_endpoint, '', $url ) );
 
+	// Delete previously stored error.
+	delete_option( 'loxo_api_credentials_error' );
+
 	$args = array(
 		'headers' => array(
 			'Authorization' => 'Basic ' . base64_encode( $api_username . ':' . $api_password )
@@ -237,9 +247,18 @@ function loxo_api_get( $path, $params = array(), $ttl = 0, $refresh = false ) {
 
 	$code = wp_remote_retrieve_response_code( $response );
 	if ( 404 === $code ) {
-		return new WP_Error( 'notFound', __( 'Resource not found.', 'loxo' ) );
+		$response = new WP_Error( 'wrong_agency', __( 'Wrong Agency Key.', 'loxo' ) );
+	} elseif ( 401 === $code ) {
+		$response = new WP_Error( 'wrong_credentials', __( 'Wrong API Credentials.', 'loxo' ) );
 	} elseif ( 500 === $code ) {
-		return new WP_Error( 'notFound', __( 'Resource not found.', 'loxo' ) );
+		$response = new WP_Error( 'not_exists', __( 'Resource not found.', 'loxo' ) );
+	}
+
+	if ( is_wp_error( $response ) ) {
+		if ( in_array( $response->get_error_code(), array( 'wrong_agency', 'wrong_credentials' ) ) ) {
+			update_option( 'loxo_api_credentials_error', $response->get_error_message() );
+		}
+		return $response;
 	}
 
 	$body = json_decode( wp_remote_retrieve_body( $response ), true );
@@ -264,7 +283,7 @@ function loxo_api_apply_job( $job_id, $post_fields = array(), $resume = array() 
 	$api_username = get_option( 'loxo_api_username' );
 	$api_password = get_option( 'loxo_api_password' );
 
-	if ( ! $api_username || ! $api_username || ! $api_username ) {
+	if ( ! $agency_key || ! $api_username || ! $api_username ) {
 		return new WP_Error( 
 			'missing_credentials', 
 			__( 'Could not apply on job. Missing api credentials.', 'loxo' )

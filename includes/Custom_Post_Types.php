@@ -34,6 +34,10 @@ class Custom_Post_Types {
 		if ( 'loxo_job' === $post_type ) {
 			$args['capabilities'] = array(
 				'create_posts' => 'create_jobs',
+				'edit_post' => 'edit_job',
+				#'edit_posts' => 'edit_jobs',
+				'edit_others_posts' => 'edit_others_jobs',
+				'edit_published_posts' => 'edit_published_jobs',
 				'delete_published_posts' => 'delete_published_jobs'
 			);
 			$args['map_meta_cap'] = true;
@@ -77,7 +81,7 @@ class Custom_Post_Types {
 			'show_in_admin_bar' => false,
 			'show_in_nav_menus' => false,
 			'menu_icon' => 'dashicons-nametag',
-			'supports' => array( 'title', /*'editor',*/ 'custom-fields' )
+			'supports' => array( 'title', 'editor', 'custom-fields' )
 		]);
 	}
 
