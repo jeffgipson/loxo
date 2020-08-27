@@ -96,7 +96,7 @@ abstract class Base_Data {
 	}
 
 	protected function pre_set_props( $props, $id ) {
-	return $props;
+		return $props;
 	}
 
 	protected function set_prop( $prop, $value ) {

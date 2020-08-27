@@ -285,6 +285,12 @@ class Page {
 
 		#$post_type_object = get_post_type_object( 'loxo_job' );
 		#Utils::p( $post_type_object->cap );
+		
+		#$slug = 'loxo-job-458845';
+		#$job = new \Loxo\Job\Data( $slug );
+
+		#$parse = parse_url( 'linkpas/jobs/?page=1&per_page=100&status=active&published_at_sort=desc' );
+		#Utils::p( $parse );
 
 		?>
 		<div class="wrap loxo-wrap">

@@ -152,7 +152,7 @@ abstract class Base_Postdata extends Base_Data
 
 	public function read()
 	{
-		if ( $this->get_id() ) {
+		if ( $this->get_id() > 0 ) {
 			$post = get_post( $this->get_id() );
 		} elseif ( $this->get_slug() ) {
 			global $wpdb;
@@ -193,13 +193,13 @@ abstract class Base_Postdata extends Base_Data
 				}
 			}
 		}
-		# Served_Api_Utils::d($data);
-
+		
 		foreach ($this->read_metadata($post->ID) as $key => $val) {
 			$data[$key] = $val;
 		}
 
 		$this->set_props( $data );
+		$this->apply_changes();
 		$this->set_object_read( true );
 	}
 
@@ -281,25 +281,6 @@ abstract class Base_Postdata extends Base_Data
 		do_action('loxo/'. $this->data_type .'_created', $this->get_id(), $this->get_data());
 	}
 
-	public function update_taxonomies($tax_input = [])
-	{
-		if ( ! empty( $tax_input ) ) {
-			foreach ( $tax_input as $taxonomy => $tags ) {
-				$taxonomy_obj = get_taxonomy( $taxonomy );
-				if ( ! $taxonomy_obj ) {
-					_doing_it_wrong( __FUNCTION__, sprintf( __( 'Invalid taxonomy: %s.' ), $taxonomy ), '4.4.0' );
-					continue;
-				}
-
-				if ( is_array( $tags ) ) {
-					$tags = array_filter( $tags );
-				}
-
-				wp_set_post_terms( $this->get_id(), $tags, $taxonomy );
-			}
-		}
-	}
-
 	public function update()
 	{
 		if (! $this->validate_save()) {
@@ -315,45 +296,66 @@ abstract class Base_Postdata extends Base_Data
 		}
 
 		// Only update when the device data changes.
+		$post_data = [];
 		if (! empty($changes)) {
-			$post_data = [];
 			foreach ($this->post_fields as $key => $attrs) {
 				if (array_key_exists($key, $changes)) {
 					$post_data[$attrs['key']] = $changes[$key];
 				}
 			}
-
-			if (! empty($this->taxonomy_fields)) {
-				$post_data['tax_input'] = [];
-				foreach ($this->taxonomy_fields as $key => $attrs) {
-					if (array_key_exists($key, $changes)) {
-						$post_data['tax_input'][$attrs['key']] = $changes[$key];
-					}
-				}
-			}
-
-			#\Loxo\Utils::d( $post_data );
-
-			if (! empty($post_data)) {
-				if (doing_action('save_post')) {
-					global $wpdb;
-					$wpdb->update($wpdb->posts, $post_data, ['ID' => $this->get_id()]);
-				} else {
-					$post_data['ID'] = $this->get_id();
-					$update = wp_update_post($post_data);
-
-					if (is_wp_error($update)) {
-						throw new Exception($update->get_error_message());
-						return false;
-					}
-				}
-			}
-
-			$this->update_metadata($changes);
-			$this->apply_changes();
 		}
 
+		if (! empty($post_data)) {
+			if (doing_action('save_post')) {
+				global $wpdb;
+				$wpdb->update($wpdb->posts, $post_data, ['ID' => $this->get_id()]);
+			} else {
+				$post_data['ID'] = $this->get_id();
+				$update = wp_update_post($post_data);
+
+				if (is_wp_error($update)) {
+					throw new Exception($update->get_error_message());
+				}
+			}
+		}
+
+    	$tax_input = [];
+		if (! empty($this->taxonomy_fields)) {
+			foreach ($this->taxonomy_fields as $key => $attrs) {
+				if (array_key_exists($key, $changes)) {
+					$tax_input[$attrs['key']] = $changes[$key];
+				}
+			}
+		}
+
+		#\Loxo\Utils::d( $post_data );
+
+		$this->update_taxonomies( $tax_input );
+		$this->update_metadata( $changes );
+		$this->apply_changes();
+
 		do_action('loxo/'. $this->data_type .'_updated', $this->get_id(), $this->get_data(), $changes);
+	}
+
+	public function update_taxonomies($tax_input = []) {
+		if ( ! empty( $tax_input ) ) {
+			foreach ( $tax_input as $taxonomy => $tags ) {
+				$taxonomy_obj = get_taxonomy( $taxonomy );
+				if ( ! $taxonomy_obj ) {
+					_doing_it_wrong( __FUNCTION__, sprintf( __( 'Invalid taxonomy: %s.' ), $taxonomy ), '4.4.0' );
+					continue;
+				}
+
+				if ( is_array( $tags ) ) {
+					$tags = array_filter( $tags );
+				}
+
+				$set = wp_set_post_terms( $this->get_id(), $tags, $taxonomy );
+				if (is_wp_error($set)) {
+					throw new Exception($set->get_error_message());
+				}
+			}
+		}
 	}
 
 	protected function validate_save()

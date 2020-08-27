@@ -229,7 +229,7 @@ function loxo_api_get( $path, $params = array(), $ttl = 0, $refresh = false ) {
 	}
 
 	// Do log.
-	loxo_log( 'loxo api request - ' . str_replace( $api_endpoint, '', $url ) );
+	loxo_log( 'API Request - ' . $path, $params );
 
 	// Delete previously stored error.
 	delete_option( 'loxo_api_credentials_error' );
