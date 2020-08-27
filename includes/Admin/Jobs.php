@@ -41,15 +41,16 @@ class Jobs {
     }
 
     public function job_columns( $columns ) {
+        unset( $columns['date'], $columns['taxonomy-loxo_job_cat'], $columns['taxonomy-loxo_job_state'] );
+
+        $columns['job_id'] = __( 'Job ID', 'loxo' );
+        $columns['taxonomy-loxo_job_cat'] = __( 'Categories', 'loxo' );
+        $columns['taxonomy-loxo_job_state'] = __( 'States', 'loxo' );
         $columns['address'] = __( 'Address', 'loxo' );
         $columns['location'] = __( 'Location', 'loxo' );
         $columns['salary'] = __( 'Salary', 'loxo' );
         $columns['published'] = __( 'Published', 'loxo' );
         $columns['expires'] = __( 'Expires', 'loxo' );
-        $columns['taxonomy-loxo_job_cat'] = __( 'Categories', 'loxo' );
-        $columns['taxonomy-loxo_job_state'] = __( 'States', 'loxo' );
-
-        unset( $columns['date'] );
 
         return $columns;
     }
@@ -58,8 +59,11 @@ class Jobs {
         $job = new \Loxo\Job\Data( $post_id );
         switch ( $column ) :
 
+            case 'job_id':
+                echo $job->get_job_id();
+                break;
+
             case 'address':
-                $locations = array();
                 if ( $job->get_address() ) {
                     echo $job->get_address();
                 } else {

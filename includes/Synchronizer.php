@@ -47,6 +47,7 @@ class Synchronizer {
      * Synchronize jobs from loxo.
      */
     public function synchronize_jobs( $limit = null ) {
+        loxo_log( 'Syncronizing jobs' );
         $jobs = loxo_get_all_jobs();
 
         if ( is_wp_error( $jobs ) ) {
@@ -110,6 +111,7 @@ class Synchronizer {
      * Import a job from collection/jobs endpoint.
      */
     public function synchronize_collection_job( $job_data ) {
+        loxo_log( 'Syncronizing collection job', $job_data );
         $slug = 'loxo-job-' . $job_data['id'];
 
         try {
@@ -128,6 +130,8 @@ class Synchronizer {
             $job->set_status( 'publish' );
 
             $job->save();
+
+            loxo_log( 'Job data', $job->get_data() );
 
             if ( ! $job->get_description() ) {
                 // Schedule so that job description gets updated.
@@ -159,7 +163,14 @@ class Synchronizer {
             $job->set_props( $this->get_job_data_props( $job_data ) );
             $job->set_description( $job_data['description'] );
             $job->set_date_checked( current_time( 'mysql' ) );
-            $job->set_status( 'publish' );
+
+            // While checking single job api, make sure to set status by status field.
+            if ( isset( $job_data['status']['name'] ) && $job_data['status']['name'] === 'Active' ) {
+                $job->set_status( 'publish' );
+            } else {
+                $job->set_status( 'pending' );
+            }
+
             $job->set_user_id( '0' );
 
             $job->save();
@@ -200,7 +211,10 @@ class Synchronizer {
 					]);
 					$job_category->save();
 					$job_category_ids[] = $job_category->get_id();
+                    loxo_log( 'New category', $job_category->get_data() );
+
 				} catch ( \Loxo\Exception\Resource_Exists $e ) {
+                    loxo_log( 'Existing category', $e->getCode() );
 					$job_category_ids[] = (int) $e->getCode();
 				} catch ( \Loxo\Exception\Exception $e ) {
 				}
@@ -220,6 +234,7 @@ class Synchronizer {
             'salary' => $job_data['salary'],
             'country_code' => $job_data['country_code'],
             'type' => $job_data['job_type']['name'],
+            'address' => $job_data['address'],
 
             'state_id' => $job_state_id,
             'category_ids' => $job_category_ids,

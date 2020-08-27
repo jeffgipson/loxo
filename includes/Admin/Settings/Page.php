@@ -60,8 +60,8 @@ class Page {
 		}
 
 		// Synchronize all jobs.
-		if ( isset( $_REQUEST['action'] ) && 'synchronize' === $_REQUEST['action'] ) {
-			if ( ! wp_verify_nonce( $_REQUEST['_wpnonce'], 'loxo_synchronize' ) ) {
+		if ( isset( $_REQUEST['action'] ) && 'synchronize_now' === $_REQUEST['action'] ) {
+			if ( ! wp_verify_nonce( $_REQUEST['_wpnonce'], 'loxo_synchronize_now' ) ) {
 				wp_die( __( 'Cheating huh?' ) );
 			}
 
@@ -75,6 +75,22 @@ class Page {
 				$message = urlencode( __( 'Synchronizion completed', 'loxo' ) );
 				wp_redirect( admin_url( 'edit.php?post_type=loxo_job&page=loxo-settings&message=' . $message ) );
 			}
+			exit;
+		}
+
+		// Reschedule synchronization.
+		if ( isset( $_REQUEST['action'] ) && 'schedule_synchronization' === $_REQUEST['action'] ) {
+			if ( ! wp_verify_nonce( $_REQUEST['_wpnonce'], 'loxo_schedule_synchronization' ) ) {
+				wp_die( __( 'Cheating huh?' ) );
+			}
+
+			if ( $timestamp = wp_next_scheduled( 'loxo_synchronize_jobs' ) ) {
+				wp_unschedule_event( $timestamp, 'loxo_synchronize_jobs'  );
+			}
+			wp_schedule_single_event( time() + 2, 'loxo_synchronize_jobs' );
+
+			$message = urlencode( __( 'Synchronizion scheduled', 'loxo' ) );
+			wp_redirect( admin_url( 'edit.php?post_type=loxo_job&page=loxo-settings&message=' . $message ) );
 			exit;
 		}
 
@@ -172,7 +188,8 @@ class Page {
 					'type'              => 'text',
 					'default'			=> '10',
                     'sanitize_callback' => 'sanitize_text_field'
-                ),
+				),
+				/*
 				array(
                     'id'                => 'loxo_job_expiration_custom_field',
                     'name'              => 'loxo_job_expiration_custom_field',
@@ -180,7 +197,7 @@ class Page {
 					'desc'				=> __( 'If loxo has enabled a custom date field for you that you would use for job expiration/validthrough date, enter the field name here.', 'loxo' ),
 					'type'              => 'text',
                     'sanitize_callback' => 'sanitize_text_field'
-                ),
+                ),*/
 				array(
                     'id'                => 'loxo_default_job_validity_days',
                     'name'              => 'loxo_default_job_validity_days',
@@ -266,8 +283,8 @@ class Page {
 		#$synchronizer->sunc_jobs();
 		#$synchronizer->display_logs();
 
-		$post_type_object = get_post_type_object( 'loxo_job' );
-		Utils::p( $post_type_object->cap );
+		#$post_type_object = get_post_type_object( 'loxo_job' );
+		#Utils::p( $post_type_object->cap );
 
 		?>
 		<div class="wrap loxo-wrap">
@@ -294,10 +311,17 @@ class Page {
 					);
 					?></br/></br/><a class="button button-primary" href="<?php echo add_query_arg(
 						array(
-							'action' => 'synchronize',
-							'_wpnonce' => wp_create_nonce( 'loxo_synchronize' )
+							'action' => 'synchronize_now',
+							'_wpnonce' => wp_create_nonce( 'loxo_synchronize_now' )
 						)
-					); ?>"><?php _e( 'Synchronize', 'loxo' ); ?></a>
+					); ?>"><?php _e( 'Synchronize now', 'loxo' ); ?></a>
+					Or
+					<a class="button button-primary" href="<?php echo add_query_arg(
+						array(
+							'action' => 'schedule_synchronization',
+							'_wpnonce' => wp_create_nonce( 'loxo_schedule_synchronization' )
+						)
+					); ?>"><?php _e( 'Shedule', 'loxo' ); ?></a>
 					<?php 
 					if ( $timestamp = wp_next_scheduled( 'loxo_synchronize_jobs' ) ) {
 						echo '<br /><br /><strong>';

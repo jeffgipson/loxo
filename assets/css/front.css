@@ -70,10 +70,11 @@
 .loxo-jobs-listing{
 	display: flex;
 	flex-wrap: nowrap;
-	grid-gap: 20px;
+	padding-bottom: 50px;
 }
 .loxo-jobs-filters{
 	flex: 0 0 300px;
+	padding-right: 20px;
 }
 .loxo-jobs-filters .loxo-reset-button{
 	float: right;
@@ -93,6 +94,7 @@
 }
 .loxo-jobs .job-inner{
 	padding: 20px;
+	position: relative;
 	transition: all .3s ease-in-out;
 	background-color: #FFF;
 	border: 1px solid #ddd;
@@ -100,6 +102,14 @@
 }
 .loxo-jobs .loxo-job:hover .job-inner{
 	border-color: #33c69a;
+}
+.job-link{
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	z-index: 10;
+	position: absolute;
 }
 .loxo-jobs .job-title{
 	margin: 0;

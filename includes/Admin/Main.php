@@ -44,7 +44,7 @@ class Main {
 		$new_links = array();
 		$new_links['settings'] = sprintf(
 			'<a href="%s">%s</a>',
-			admin_url( 'options-general.php?page=loxo-settings' ),
+			admin_url( 'edit.php?post_type=loxo_job&page=loxo-settings' ),
 			__( 'Settings', 'loxo' )
 		);
 

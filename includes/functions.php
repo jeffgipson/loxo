@@ -111,7 +111,8 @@ function loxo_get_all_jobs() {
 	$params = array(
 		'page'     => 1,
 		'per_page' => 100,
-		'status' => 'active'
+		'status' => 'active',
+		'published_at_sort' => 'desc'
 	);
 	/*
 	if ( get_option( 'loxo_active_job_status_id' ) ) {

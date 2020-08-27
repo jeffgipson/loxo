@@ -19,14 +19,23 @@
 		overflow: hidden;
 	}
 
-	.post-type-loxo_job .wp-list-table .column-taxonomy-loxo_job_cat,
-	.post-type-loxo_job .wp-list-table .column-taxonomy-loxo_job_state,
-	.post-type-loxo_job .wp-list-table .column-location,
-	.post-type-loxo_job .wp-list-table .column-address{
-		width: 100px;
+	.post-type-loxo_job .wp-list-table .check-column{
+		display: none;
+	}
+	.post-type-loxo_job .wp-list-table .column-job_id{
+		width: 50px;
 	}
 
-	.post-type-loxo_job .wp-list-table .column-salary,
+	.post-type-loxo_job .wp-list-table .column-taxonomy-loxo_job_cat,
+	.post-type-loxo_job .wp-list-table .column-taxonomy-loxo_job_state{
+		width: 80px;
+	}
+	.post-type-loxo_job .wp-list-table .column-location,
+	.post-type-loxo_job .wp-list-table .column-address,
+	.post-type-loxo_job .wp-list-table .column-salary{
+		width: 80px;
+	}
+
 	.post-type-loxo_job .wp-list-table .column-published,
 	.post-type-loxo_job .wp-list-table .column-expires{
 		width: 100px;

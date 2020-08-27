@@ -77,9 +77,8 @@ class Job_Metadata {
 		$date_posted = gmdate( 'Y-m-d', strtotime( $this->job->get_date_published() ) );
 
 		// Valid through.
-		// $expiration_field = get_option( 'loxo_job_expiration_custom_field' );
 		if ( $this->job->get_date_expires() ) {
-			$valid_through = gmdate( 'Y-m-d', strtotime( $this->job->get_date_expires() ) );
+			$valid_through = gmdate( 'Y-m-d', strtotime( $this->job->get_date_expires() . ' 00:00:00' ) );
 		} else {
 			$valid_through = loxo_calculate_job_expiration( $date_posted );
 		}

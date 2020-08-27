@@ -35,7 +35,7 @@ class Custom_Post_Types {
 			$args['capabilities'] = array(
 				'create_posts' => 'create_jobs',
 				'edit_post' => 'edit_job',
-				'edit_posts' => 'edit_jobs',
+				#'edit_posts' => 'edit_jobs',
 				'edit_others_posts' => 'edit_others_jobs',
 				'edit_published_posts' => 'edit_published_jobs',
 				'delete_published_posts' => 'delete_published_jobs'

@@ -2,12 +2,15 @@
 /* Listing Page Content */
 ?>
 <?php
-printf(
-	'<a id="job-%d" href="%s" class="loxo-job">
-	<div class="job-inner">',
-	$job->get_job_id(),
-	loxo_get_job_url( $job->get_job_id(), $job->get_name() )
-);
+echo '<div class="loxo-job">';
+	echo '<div class="job-inner">';
+
+	printf(
+		'<a id="job-%d" href="%s" class="job-link"></a>',
+		$job->get_job_id(),
+		loxo_get_job_url( $job->get_job_id(), $job->get_name() )
+	);
+
 	echo '<div class="job-header">';
 		echo '<div class="job-id">';
 			printf(
@@ -72,4 +75,5 @@ printf(
 		echo '</div>';
 	}
 
-echo '</div></a>';
+	echo '</div>';
+echo '</div>';
