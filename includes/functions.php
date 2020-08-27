@@ -96,6 +96,12 @@ function loxo_clear_all_cache() {
 
 	delete_option( 'loxo_api_credentials_error' );
 
+	// Clear w3 total cache.
+	if ( loxo_get_listing_page_id() ) {
+		do_action( 'w3tc_flush_post', loxo_get_listing_page_id() );
+		do_action( 'w3tc_flush_url', get_permalink( loxo_get_listing_page_id() ), null );
+	}
+
 	// Clear opcache.
 	if ( function_exists( 'opcache_reset' ) ) {
 		opcache_reset();

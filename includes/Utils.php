@@ -1,11 +1,11 @@
 <?php
-namespace Loxo;
-
 /**
  * Utility Class File.
  *
  * @package Loxo
  */
+
+namespace Loxo;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -25,7 +25,7 @@ class Utils {
 	 */
 	public static function p( $data ) {
 		echo '<pre>';
-		print_r( $data );
+		print_r( $data ); // phpcs:ignore
 		echo '</pre>';
 	}
 

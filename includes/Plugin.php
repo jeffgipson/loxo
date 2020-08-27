@@ -1,11 +1,11 @@
 <?php
-namespace Loxo;
-
 /**
- * Main Plugin File.
+ * Loxo main plugin file.
  *
  * @package Loxo
  */
+
+namespace Loxo;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
