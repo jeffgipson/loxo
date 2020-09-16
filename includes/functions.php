@@ -8,12 +8,15 @@ function loxo_salary( $salary ) {
 	return '$' . number_format( $_salary, 0, '.', ',' );
 }
 
-add_action( 'template_redirect2', function(){
-	$job = new \Loxo\Job\Data( 'loxo-job-469477' );
-	#$job->set_salary( '$2000.00 - #5000.0 per week' );
-	\Loxo\Utils::d( loxo_get_job_salary_data( $job ) );
-	exit;
-});
+add_action(
+	'template_redirect2',
+	function() {
+		$job = new \Loxo\Job\Data( 'loxo-job-469477' );
+		// $job->set_salary( '$2000.00 - #5000.0 per week' );
+		\Loxo\Utils::d( loxo_get_job_salary_data( $job ) );
+		exit;
+	}
+);
 
 function loxo_get_job_salary( $job ) {
 	$salary_data = loxo_get_job_salary_data( $job );
@@ -30,15 +33,15 @@ function loxo_get_job_salary( $job ) {
 
 /**
  * Get job salary data.
- * 
+ *
  * @param \Loxo\Job $job Loxo job object.
  */
 function loxo_get_job_salary_data( $job ) {
 	$data = array(
 		'value' => '',
-		'unit' => 'YEAR',
-		'min' => '',
-		'max' => ''
+		'unit'  => 'YEAR',
+		'min'   => '',
+		'max'   => '',
 	);
 
 	if ( $job->get_salary() ) {
@@ -57,8 +60,8 @@ function loxo_get_job_salary_data( $job ) {
 		$range = loxo_get_salary_range( $salary_string );
 
 		if ( $range ) {
-			$data['min'] = $range['min'];
-			$data['max'] = $range['max'];
+			$data['min']   = $range['min'];
+			$data['max']   = $range['max'];
 			$data['value'] = $range['max'];
 		} else {
 			$salary = preg_replace( '/[^0-9\.]/i', '', $salary_string );
@@ -129,7 +132,7 @@ function loxo_get_salary_range( $salary ) {
 	}
 
 	$salary = preg_replace( '/[^0-9\.\-]/i', '', trim( $salary ) );
-	$parts = explode( '-', $salary );
+	$parts  = explode( '-', $salary );
 
 	if ( count( $parts ) !== 2 ) {
 		return false;
@@ -137,7 +140,7 @@ function loxo_get_salary_range( $salary ) {
 
 	return array(
 		'min' => number_format( $parts[0], 0, '.', '' ),
-		'max' => number_format( $parts[1], 0, '.', '' )
+		'max' => number_format( $parts[1], 0, '.', '' ),
 	);
 }
 
@@ -149,10 +152,10 @@ function loxo_sanitize_job_description( $desc ) {
 	$desc = wpautop( $desc );
 	$desc = str_replace(
 		array(
-			'<p>&nbsp;</p>'
+			'<p>&nbsp;</p>',
 		),
 		array(
-			''
+			'',
 		),
 		$desc
 	);
@@ -181,7 +184,7 @@ function loxo_get_new_job_url( $job_id, $job = '' ) {
 		}
 
 		$job_title = $job->get_name();
-		$job_slug = sanitize_title( $job_title );
+		$job_slug  = sanitize_title( $job_title );
 
 		if ( $job->get_city() ) {
 			$job_slug .= '-in-' . sanitize_title_with_dashes( $job->get_city() );
@@ -231,8 +234,8 @@ function loxo_get_listing_page_id() {
 function loxo_clear_all_cache() {
 	// Clear transient.
 	global $wpdb;
-	$match = '%\_loxo_cache\_%';
-	$options = $wpdb->get_col("SELECT option_name FROM $wpdb->options WHERE option_name LIKE '$match'");
+	$match   = '%\_loxo_cache\_%';
+	$options = $wpdb->get_col( "SELECT option_name FROM $wpdb->options WHERE option_name LIKE '$match'" );
 	if ( ! empty( $options ) ) {
 		foreach ( $options as $option ) {
 			delete_option( $option );
@@ -260,10 +263,10 @@ function loxo_clear_all_cache() {
  */
 function loxo_get_all_jobs() {
 	$params = array(
-		'page'     => 1,
-		'per_page' => 100,
-		'status' => 'active',
-		'published_at_sort' => 'desc'
+		'page'              => 1,
+		'per_page'          => 100,
+		'status'            => 'active',
+		'published_at_sort' => 'desc',
 	);
 	/*
 	if ( get_option( 'loxo_active_job_status_id' ) ) {
@@ -310,7 +313,7 @@ function loxo_sort_by_published_at( $a, $b ) {
 		return 0;
 	}
 
-	if ( strtotime( $a['published_at'] ) < strtotime( $b['published_at'] )) {
+	if ( strtotime( $a['published_at'] ) < strtotime( $b['published_at'] ) ) {
 		return 1;
 	}
 
@@ -346,11 +349,11 @@ function loxo_api_get_jobs( $params = array(), $refresh = false ) {
 
 /**
  * Perform an GET request on LOXO API.
- * 
+ *
  * @param string $path Api path.
- * @param array $params Parameters.
- * @param int $ttl Cache time to live.
- * 
+ * @param array  $params Parameters.
+ * @param int    $ttl Cache time to live.
+ *
  * @return mixed.
  */
 function loxo_api_get( $path, $params = array(), $ttl = 0, $refresh = false ) {
@@ -359,13 +362,13 @@ function loxo_api_get( $path, $params = array(), $ttl = 0, $refresh = false ) {
 	$api_password = get_option( 'loxo_api_password' );
 
 	if ( ! $api_username || ! $api_username || ! $api_username ) {
-		return new WP_Error( 
-			'missing_credentials', 
+		return new WP_Error(
+			'missing_credentials',
 			__( 'Could not connect to loxo. Missing api credentials.', 'loxo' )
 		);
 	}
 
-	$cache_key = 'loxo_cache_'. md5( $agency_key . $path . serialize( $params ) );
+	$cache_key = 'loxo_cache_' . md5( $agency_key . $path . serialize( $params ) );
 	if ( $ttl > 0 && ! $refresh ) {
 		if ( false !== get_transient( $cache_key ) ) {
 			return get_transient( $cache_key );
@@ -387,8 +390,8 @@ function loxo_api_get( $path, $params = array(), $ttl = 0, $refresh = false ) {
 
 	$args = array(
 		'headers' => array(
-			'Authorization' => 'Basic ' . base64_encode( $api_username . ':' . $api_password )
-		)
+			'Authorization' => 'Basic ' . base64_encode( $api_username . ':' . $api_password ),
+		),
 	);
 
 	$response = wp_remote_get( $url, $args );
@@ -424,9 +427,9 @@ function loxo_api_get( $path, $params = array(), $ttl = 0, $refresh = false ) {
 /**
  * Send job application request to loxo api.
  *
- * @param  int    $job_id      Loxo job id.
- * @param  array  $post_fields Array data: name, email, phone.
- * @param  array  $resume      Array data: resume name and file path.
+ * @param  int   $job_id      Loxo job id.
+ * @param  array $post_fields Array data: name, email, phone.
+ * @param  array $resume      Array data: resume name and file path.
  * @return mixed               Api response or WP_Error.
  */
 function loxo_api_apply_job( $job_id, $post_fields = array(), $resume = array() ) {
@@ -435,8 +438,8 @@ function loxo_api_apply_job( $job_id, $post_fields = array(), $resume = array() 
 	$api_password = get_option( 'loxo_api_password' );
 
 	if ( ! $agency_key || ! $api_username || ! $api_username ) {
-		return new WP_Error( 
-			'missing_credentials', 
+		return new WP_Error(
+			'missing_credentials',
 			__( 'Could not apply on job. Missing api credentials.', 'loxo' )
 		);
 	}
@@ -447,7 +450,7 @@ function loxo_api_apply_job( $job_id, $post_fields = array(), $resume = array() 
 
 	$boundary = wp_generate_password( 24 );
 	$headers  = array(
-		'content-type' => 'multipart/form-data; boundary=' . $boundary,
+		'content-type'  => 'multipart/form-data; boundary=' . $boundary,
 		'Authorization' => 'Basic ' . base64_encode( $api_username . ':' . $api_password ),
 	);
 
@@ -470,7 +473,7 @@ function loxo_api_apply_job( $job_id, $post_fields = array(), $resume = array() 
 	$payload .= ' name="resume";';
 	$payload .= ' filename="' . $resume['name'] . '"';
 	$payload .= "\r\n";
-	//        $payload .= 'Content-Type: image/jpeg' . "\r\n";
+	// $payload .= 'Content-Type: image/jpeg' . "\r\n";
 	$payload .= "\r\n";
 	$payload .= file_get_contents( $resume['file'] );
 	$payload .= "\r\n";
@@ -479,10 +482,10 @@ function loxo_api_apply_job( $job_id, $post_fields = array(), $resume = array() 
 
 	$args = array(
 		'headers' => array(
-			'content-type' => 'multipart/form-data; boundary=' . $boundary,
-			'Authorization' => 'Basic ' . base64_encode( $api_username . ':' . $api_password )
+			'content-type'  => 'multipart/form-data; boundary=' . $boundary,
+			'Authorization' => 'Basic ' . base64_encode( $api_username . ':' . $api_password ),
 		),
-		'body' => $payload,
+		'body'    => $payload,
 	);
 
 	$response = wp_remote_post( $url, $args );
@@ -502,7 +505,7 @@ function loxo_log( $message, $context = array() ) {
 	if ( empty( $context ) ) {
 		$context = array(
 			'Cron' => (int) wp_doing_cron(),
-			'Ajax' => (int) wp_doing_ajax()
+			'Ajax' => (int) wp_doing_ajax(),
 		);
 	}
 

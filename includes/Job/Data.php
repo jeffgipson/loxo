@@ -20,9 +20,9 @@ class Data extends Base_Postdata {
 		'zip'            => '',
 		'country_code'   => '',
 		'salary'         => '',
-		'type'			 => '',
-		'address'		 => '',
-		
+		'type'           => '',
+		'address'        => '',
+
 		'state_id'       => '',
 		'category_ids'   => array(),
 
@@ -73,11 +73,11 @@ class Data extends Base_Postdata {
 			'key'    => 'salary',
 			'unique' => true,
 		),
-		'type'       => array(
+		'type'         => array(
 			'key'    => 'type',
 			'unique' => true,
 		),
-		'address'       => array(
+		'address'      => array(
 			'key'    => 'address',
 			'unique' => true,
 		),
@@ -97,7 +97,7 @@ class Data extends Base_Postdata {
 			'unique' => true,
 		),
 		'category_ids' => array(
-			'key' => 'loxo_job_cat',
+			'key'    => 'loxo_job_cat',
 			'unique' => false,
 		),
 	);

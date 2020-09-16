@@ -55,7 +55,7 @@ class Page {
 			loxo_clear_all_cache();
 
 			$message = urlencode( __( 'Cache cleared.', 'loxo' ) );
-			wp_redirect( admin_url( 'edit.php?post_type=loxo_job&page=loxo-settings&message='. $message ) );
+			wp_redirect( admin_url( 'edit.php?post_type=loxo_job&page=loxo-settings&message=' . $message ) );
 			exit;
 		}
 
@@ -66,7 +66,7 @@ class Page {
 			}
 
 			$synchronizer = new \Loxo\Synchronizer();
-			$sync = $synchronizer->synchronize_jobs();
+			$sync         = $synchronizer->synchronize_jobs();
 
 			if ( false === $sync ) {
 				$message = urlencode( __( 'Synchronizion failed.', 'loxo' ) );
@@ -85,7 +85,7 @@ class Page {
 			}
 
 			if ( $timestamp = wp_next_scheduled( 'loxo_synchronize_jobs' ) ) {
-				wp_unschedule_event( $timestamp, 'loxo_synchronize_jobs'  );
+				wp_unschedule_event( $timestamp, 'loxo_synchronize_jobs' );
 			}
 			wp_schedule_single_event( time() + 2, 'loxo_synchronize_jobs' );
 
@@ -115,153 +115,153 @@ class Page {
 		}
 	}
 
-    public function admin_init() {
-        $this->settings_api->set_page( 'loxo-settings' );
-        $this->settings_api->set_sections( $this->get_settings_sections() );
-        $this->settings_api->set_fields( $this->get_settings_fields() );
-        $this->settings_api->admin_init();
-    }
+	public function admin_init() {
+		$this->settings_api->set_page( 'loxo-settings' );
+		$this->settings_api->set_sections( $this->get_settings_sections() );
+		$this->settings_api->set_fields( $this->get_settings_fields() );
+		$this->settings_api->admin_init();
+	}
 
-    public function get_settings_sections() {
-        $sections = array(
-            array(
-                'id'    => 'api',
-                'title' => __( 'API Settings', 'loxo' )
-            ),
-            array(
-                'id'    => 'general',
-                'title' => __( 'General Settings', 'loxo' )
-            ),
-            array(
-                'id'    => 'synchronizer',
-                'title' => __( 'Synchronizer Setting', 'loxo' )
-            ),
-            array(
-                'id'    => 'seo',
-                'title' => __( 'SEO Settings', 'loxo' )
-            )
-        );
-        return $sections;
-    }
+	public function get_settings_sections() {
+		$sections = array(
+			array(
+				'id'    => 'api',
+				'title' => __( 'API Settings', 'loxo' ),
+			),
+			array(
+				'id'    => 'general',
+				'title' => __( 'General Settings', 'loxo' ),
+			),
+			array(
+				'id'    => 'synchronizer',
+				'title' => __( 'Synchronizer Setting', 'loxo' ),
+			),
+			array(
+				'id'    => 'seo',
+				'title' => __( 'SEO Settings', 'loxo' ),
+			),
+		);
+		return $sections;
+	}
 
-    public function get_settings_fields() {
-        $settings_fields = array(
-            'api' => array(
+	public function get_settings_fields() {
+		$settings_fields = array(
+			'api'          => array(
 				array(
-                    'id'                => 'loxo_agency_key',
-                    'name'              => 'loxo_agency_key',
-                    'label'             => __( 'Agency Key', 'loxo' ),
-					'desc'				=> __( 'Contact loxo support to get this information.', 'loxo' ),
-                    'type'              => 'text',
-                    'sanitize_callback' => 'sanitize_text_field'
-                ),
-                array(
-                    'id'                => 'loxo_api_username',
-                    'name'              => 'loxo_api_username',
-                    'label'             => __( 'API Username', 'loxo' ),
-					'desc'				=> __( 'Contact loxo support to get this information.', 'loxo' ),
-                    'type'              => 'text',
-                    'sanitize_callback' => 'sanitize_text_field'
-                ),
-				array(
-                    'id'                => 'loxo_api_password',
-                    'name'              => 'loxo_api_password',
-                    'label'             => __( 'API Password', 'loxo' ),
-					'desc'				=> __( 'Contact loxo support to get this information.', 'loxo' ),
-                    'type'              => 'text',
-                    'sanitize_callback' => 'sanitize_text_field'
-                ),
-            ),
-            'general' => array(
-                array(
-                    'id'                => 'loxo_listing_page_id',
-                    'name'              => 'loxo_listing_page_id',
-                    'label'             => __( 'Listing Page', 'loxo' ),
-					'desc'				=> __( 'Job listing will be automatically displayed on this page. Also, single job pages will be generated using this page url.', 'loxo' ),
-                    'type'              => 'pages'
-                ),
-				array(
-                    'id'                => 'loxo_listings_per_page',
-                    'name'              => 'loxo_listings_per_page',
-					'label'             => __( 'Listings Per Page', 'loxo' ),
-					'desc'				=> __( 'Number of jobs to display per page while paginating', 'loxo' ),
+					'id'                => 'loxo_agency_key',
+					'name'              => 'loxo_agency_key',
+					'label'             => __( 'Agency Key', 'loxo' ),
+					'desc'              => __( 'Contact loxo support to get this information.', 'loxo' ),
 					'type'              => 'text',
-					'default'			=> '10',
-                    'sanitize_callback' => 'sanitize_text_field'
+					'sanitize_callback' => 'sanitize_text_field',
+				),
+				array(
+					'id'                => 'loxo_api_username',
+					'name'              => 'loxo_api_username',
+					'label'             => __( 'API Username', 'loxo' ),
+					'desc'              => __( 'Contact loxo support to get this information.', 'loxo' ),
+					'type'              => 'text',
+					'sanitize_callback' => 'sanitize_text_field',
+				),
+				array(
+					'id'                => 'loxo_api_password',
+					'name'              => 'loxo_api_password',
+					'label'             => __( 'API Password', 'loxo' ),
+					'desc'              => __( 'Contact loxo support to get this information.', 'loxo' ),
+					'type'              => 'text',
+					'sanitize_callback' => 'sanitize_text_field',
+				),
+			),
+			'general'      => array(
+				array(
+					'id'    => 'loxo_listing_page_id',
+					'name'  => 'loxo_listing_page_id',
+					'label' => __( 'Listing Page', 'loxo' ),
+					'desc'  => __( 'Job listing will be automatically displayed on this page. Also, single job pages will be generated using this page url.', 'loxo' ),
+					'type'  => 'pages',
+				),
+				array(
+					'id'                => 'loxo_listings_per_page',
+					'name'              => 'loxo_listings_per_page',
+					'label'             => __( 'Listings Per Page', 'loxo' ),
+					'desc'              => __( 'Number of jobs to display per page while paginating', 'loxo' ),
+					'type'              => 'text',
+					'default'           => '10',
+					'sanitize_callback' => 'sanitize_text_field',
 				),
 				/*
 				array(
-                    'id'                => 'loxo_job_expiration_custom_field',
-                    'name'              => 'loxo_job_expiration_custom_field',
-                    'label'             => __( 'Name of the job expiration custom field', 'loxo' ),
+					'id'                => 'loxo_job_expiration_custom_field',
+					'name'              => 'loxo_job_expiration_custom_field',
+					'label'             => __( 'Name of the job expiration custom field', 'loxo' ),
 					'desc'				=> __( 'If loxo has enabled a custom date field for you that you would use for job expiration/validthrough date, enter the field name here.', 'loxo' ),
 					'type'              => 'text',
-                    'sanitize_callback' => 'sanitize_text_field'
-                ),*/
+					'sanitize_callback' => 'sanitize_text_field'
+				),*/
 				array(
-                    'id'                => 'loxo_default_job_validity_days',
-                    'name'              => 'loxo_default_job_validity_days',
-                    'label'             => __( 'Default job validity (in days)', 'loxo' ),
-					'desc'				=> __( 'If job expiration custom field comes empty, a validThrough date will be calculated in conjunction with job publication date.', 'loxo' ),
+					'id'                => 'loxo_default_job_validity_days',
+					'name'              => 'loxo_default_job_validity_days',
+					'label'             => __( 'Default job validity (in days)', 'loxo' ),
+					'desc'              => __( 'If job expiration custom field comes empty, a validThrough date will be calculated in conjunction with job publication date.', 'loxo' ),
 					'type'              => 'text',
-                    'sanitize_callback' => 'sanitize_text_field'
-                ),
+					'sanitize_callback' => 'sanitize_text_field',
+				),
 				array(
-                    'id'                => 'loxo_enable_salary_intelligence',
-                    'name'              => 'loxo_enable_salary_intelligence',
-                    'label'             => __( 'Autoparse Salary?', 'loxo' ),
-					'desc'				=> __( 'If enabled, salary will be parsed from description if salary field returns empty. Plugin will look for <code>Min Compensation</code> & <code>Max Compensation</code> string and look for salaries.', 'loxo' ),
-                    'type'              => 'checkbox',
-                    'sanitize_callback' => 'sanitize_text_field'
-                )
+					'id'                => 'loxo_enable_salary_intelligence',
+					'name'              => 'loxo_enable_salary_intelligence',
+					'label'             => __( 'Autoparse Salary?', 'loxo' ),
+					'desc'              => __( 'If enabled, salary will be parsed from description if salary field returns empty. Plugin will look for <code>Min Compensation</code> & <code>Max Compensation</code> string and look for salaries.', 'loxo' ),
+					'type'              => 'checkbox',
+					'sanitize_callback' => 'sanitize_text_field',
+				),
 			),
 			'synchronizer' => array(
 				array(
-                    'id'                => 'loxo_all_jobs_synchronizer_interval',
-                    'name'              => 'loxo_all_jobs_synchronizer_interval',
-                    'label'             => __( 'Jobs Update Frequency (in minutes)', 'loxo' ),
-					'desc'				=> __( 'How frequently jobs should be updated.', 'loxo' ),
-                    'type'              => 'text',
-					'default'			=> 300,
-                    'sanitize_callback' => 'sanitize_text_field'
-				)
+					'id'                => 'loxo_all_jobs_synchronizer_interval',
+					'name'              => 'loxo_all_jobs_synchronizer_interval',
+					'label'             => __( 'Jobs Update Frequency (in minutes)', 'loxo' ),
+					'desc'              => __( 'How frequently jobs should be updated.', 'loxo' ),
+					'type'              => 'text',
+					'default'           => 300,
+					'sanitize_callback' => 'sanitize_text_field',
+				),
 			),
-            'seo' => array(
-                array(
-                    'id'                => 'loxo_hiring_company_name',
-                    'name'              => 'loxo_hiring_company_name',
-                    'label'             => __( 'Hiring Company Name', 'loxo' ),
-					'desc'				=> __( 'Used on single job company name schema.', 'loxo' ),
-                    'type'              => 'text',
-					'default'			=> get_bloginfo( 'sitename'),
-                    'sanitize_callback' => 'sanitize_text_field'
-                ),
+			'seo'          => array(
 				array(
-                    'id'                => 'loxo_hiring_company_url',
-                    'name'              => 'loxo_hiring_company_url',
-                    'label'             => __( 'Hiring Company Url', 'loxo' ),
-					'desc'				=> __( 'Used on single job company sameAs schema.', 'loxo' ),
-                    'type'              => 'text',
-					'default'			=> home_url( '/' ),
-                    'sanitize_callback' => 'sanitize_text_field'
-                ),
+					'id'                => 'loxo_hiring_company_name',
+					'name'              => 'loxo_hiring_company_name',
+					'label'             => __( 'Hiring Company Name', 'loxo' ),
+					'desc'              => __( 'Used on single job company name schema.', 'loxo' ),
+					'type'              => 'text',
+					'default'           => get_bloginfo( 'sitename' ),
+					'sanitize_callback' => 'sanitize_text_field',
+				),
 				array(
-                    'id'                => 'loxo_hiring_company_logo',
-                    'name'              => 'loxo_hiring_company_logo',
-                    'label'             => __( 'Hiring Company Logo', 'loxo' ),
-					'desc'				=> __( 'Used on single job company logo schema.', 'loxo' ),
-                    'type'              => 'text',
-                    'sanitize_callback' => 'sanitize_text_field'
-                ),
+					'id'                => 'loxo_hiring_company_url',
+					'name'              => 'loxo_hiring_company_url',
+					'label'             => __( 'Hiring Company Url', 'loxo' ),
+					'desc'              => __( 'Used on single job company sameAs schema.', 'loxo' ),
+					'type'              => 'text',
+					'default'           => home_url( '/' ),
+					'sanitize_callback' => 'sanitize_text_field',
+				),
 				array(
-                    'id'                => 'loxo_enable_sitemap',
-                    'name'              => 'loxo_enable_sitemap',
-                    'label'             => __( 'Enable Jobs Sitemap?', 'loxo' ),
-					'desc'				=> __( 'If enabled, a sitemap will be created for your jobs', 'loxo' ),
-                    'type'              => 'checkbox',
-                    'sanitize_callback' => 'sanitize_text_field'
-                )
-            )
+					'id'                => 'loxo_hiring_company_logo',
+					'name'              => 'loxo_hiring_company_logo',
+					'label'             => __( 'Hiring Company Logo', 'loxo' ),
+					'desc'              => __( 'Used on single job company logo schema.', 'loxo' ),
+					'type'              => 'text',
+					'sanitize_callback' => 'sanitize_text_field',
+				),
+				array(
+					'id'                => 'loxo_enable_sitemap',
+					'name'              => 'loxo_enable_sitemap',
+					'label'             => __( 'Enable Jobs Sitemap?', 'loxo' ),
+					'desc'              => __( 'If enabled, a sitemap will be created for your jobs', 'loxo' ),
+					'type'              => 'checkbox',
+					'sanitize_callback' => 'sanitize_text_field',
+				),
+			),
 		);
 
 		/*
@@ -283,60 +283,76 @@ class Page {
 		}
 		*/
 
-        return $settings_fields;
-    }
+		return $settings_fields;
+	}
 
 	public function render_page() {
-		#$synchronizer = new \Loxo\Synchronizer();
-		#$synchronizer->sunc_jobs();
-		#$synchronizer->display_logs();
+		// $synchronizer = new \Loxo\Synchronizer();
+		// $synchronizer->sunc_jobs();
+		// $synchronizer->display_logs();
 
-		#$post_type_object = get_post_type_object( 'loxo_job' );
-		#Utils::p( $post_type_object->cap );
-		
-		#$slug = 'loxo-job-458845';
-		#$job = new \Loxo\Job\Data( $slug );
+		// $post_type_object = get_post_type_object( 'loxo_job' );
+		// Utils::p( $post_type_object->cap );
 
-		#$parse = parse_url( 'linkpas/jobs/?page=1&per_page=100&status=active&published_at_sort=desc' );
-		#Utils::p( $parse );
+		// $slug = 'loxo-job-458845';
+		// $job = new \Loxo\Job\Data( $slug );
+
+		// $parse = parse_url( 'linkpas/jobs/?page=1&per_page=100&status=active&published_at_sort=desc' );
+		// Utils::p( $parse );
 
 		?>
 		<div class="wrap loxo-wrap">
-			<h1><?php _e( 'Loxo Settings', 'loxo' ) ?></h1>
+			<h1><?php _e( 'Loxo Settings', 'loxo' ); ?></h1>
 			<div class="loxo-sidebar">
 				<p>
 					<?php
 					_e(
-						'Clear cached data.', 'loxo'
+						'Clear cached data.',
+						'loxo'
 					);
-					?></br/></br/><a class="button button-primary" href="<?php echo add_query_arg(
+					?>
+					</br/></br/><a class="button button-primary" href="
+					<?php
+					echo add_query_arg(
 						array(
-							'action' => 'clear_cache',
-							'_wpnonce' => wp_create_nonce( 'loxo_clear_cache' )
+							'action'   => 'clear_cache',
+							'_wpnonce' => wp_create_nonce( 'loxo_clear_cache' ),
 						)
-					); ?>"><?php _e( 'Clear Cache', 'loxo' ); ?></a>
+					);
+					?>
+					"><?php _e( 'Clear Cache', 'loxo' ); ?></a>
 				</p>
 				<hr />
 
 				<p>
 					<?php
 					_e(
-						'All jobs are stored locally for quick access. You can synchronize jobs from loxo to local storage using button below', 'loxo'
+						'All jobs are stored locally for quick access. You can synchronize jobs from loxo to local storage using button below',
+						'loxo'
 					);
-					?></br/></br/><a class="button button-primary" href="<?php echo add_query_arg(
+					?>
+					</br/></br/><a class="button button-primary" href="
+					<?php
+					echo add_query_arg(
 						array(
-							'action' => 'synchronize_now',
-							'_wpnonce' => wp_create_nonce( 'loxo_synchronize_now' )
+							'action'   => 'synchronize_now',
+							'_wpnonce' => wp_create_nonce( 'loxo_synchronize_now' ),
 						)
-					); ?>"><?php _e( 'Synchronize now', 'loxo' ); ?></a>
+					);
+					?>
+					"><?php _e( 'Synchronize now', 'loxo' ); ?></a>
 					Or
-					<a class="button button-primary" href="<?php echo add_query_arg(
+					<a class="button button-primary" href="
+					<?php
+					echo add_query_arg(
 						array(
-							'action' => 'schedule_synchronization',
-							'_wpnonce' => wp_create_nonce( 'loxo_schedule_synchronization' )
+							'action'   => 'schedule_synchronization',
+							'_wpnonce' => wp_create_nonce( 'loxo_schedule_synchronization' ),
 						)
-					); ?>"><?php _e( 'Shedule', 'loxo' ); ?></a>
-					<?php 
+					);
+					?>
+					"><?php _e( 'Shedule', 'loxo' ); ?></a>
+					<?php
 					if ( $timestamp = wp_next_scheduled( 'loxo_synchronize_jobs' ) ) {
 						echo '<br /><br /><strong>';
 						printf( __( 'Auto synchronizer will run in %s' ), human_time_diff( $timestamp ) );
@@ -349,14 +365,20 @@ class Page {
 				<p>
 					<?php
 					_e(
-						'Delete all jobs, categories & states from local storate', 'loxo'
+						'Delete all jobs, categories & states from local storate',
+						'loxo'
 					);
-					?></br/></br/><a class="button button-primary button-danger" href="<?php echo add_query_arg(
+					?>
+					</br/></br/><a class="button button-primary button-danger" href="
+					<?php
+					echo add_query_arg(
 						array(
-							'action' => 'delete_all',
-							'_wpnonce' => wp_create_nonce( 'loxo_delete_all' )
+							'action'   => 'delete_all',
+							'_wpnonce' => wp_create_nonce( 'loxo_delete_all' ),
 						)
-					); ?>"><?php _e( 'Delete All', 'loxo' ); ?></a>
+					);
+					?>
+					"><?php _e( 'Delete All', 'loxo' ); ?></a>
 				</p>
 
 				<?php if ( 'yes' === get_option( 'loxo_enable_sitemap' ) ) : ?>
@@ -369,9 +391,9 @@ class Page {
 					</p>
 				<?php endif; ?>
 
-	        </div>
+			</div>
 			<div class="loxo-form">
-            	<?php $this->settings_api->show_forms(); ?>
+				<?php $this->settings_api->show_forms(); ?>
 			</div>
 		</div>
 		<?php

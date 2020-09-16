@@ -33,7 +33,7 @@ class Main {
 	 * Register admin assets.
 	 */
 	public function register_scripts() {
-		wp_register_style( 'loxo-admin', LOXO_URL . 'assets/css/admin.css', array( ) );
+		wp_register_style( 'loxo-admin', LOXO_URL . 'assets/css/admin.css', array() );
 		wp_register_script( 'loxo-admin', LOXO_URL . 'assets/js/admin.js' );
 	}
 
@@ -41,7 +41,7 @@ class Main {
 	 * Adds plugin action links.
 	 */
 	public function plugin_action_links( $links ) {
-		$new_links = array();
+		$new_links             = array();
 		$new_links['settings'] = sprintf(
 			'<a href="%s">%s</a>',
 			admin_url( 'edit.php?post_type=loxo_job&page=loxo-settings' ),

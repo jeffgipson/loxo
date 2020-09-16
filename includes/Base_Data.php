@@ -18,21 +18,21 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 abstract class Base_Data {
 
-	protected $id = 0;
-	protected $changes = [];
+	protected $id          = 0;
+	protected $changes     = array();
 	protected $object_read = false;
 
-	protected $data = [];
-	protected $default_data = [];
-	protected $extra_data = [];
+	protected $data         = array();
+	protected $default_data = array();
+	protected $extra_data   = array();
 
-	protected $meta_type = 'post';
-	protected $meta_fields = [];
-	protected $extra_meta_fields = [];
+	protected $meta_type         = 'post';
+	protected $meta_fields       = array();
+	protected $extra_meta_fields = array();
 
 	public function __construct( $id = 0 ) {
-		$this->data = array_merge( $this->data, $this->extra_data );
-		$this->meta_fields = array_merge( $this->meta_fields, $this->extra_meta_fields );
+		$this->data         = array_merge( $this->data, $this->extra_data );
+		$this->meta_fields  = array_merge( $this->meta_fields, $this->extra_meta_fields );
 		$this->default_data = $this->data;
 	}
 
@@ -65,18 +65,17 @@ abstract class Base_Data {
 	}
 
 	public function set_defaults() {
-		$this->data        = $this->default_data;
-		$this->changes     = [];
+		$this->data    = $this->default_data;
+		$this->changes = array();
 		$this->set_object_read( false );
-		}
+	}
 
 	public function set_object_read( $read = true ) {
 		$this->object_read = (bool) $read;
 	}
 
-	public function set_props($props, $context = 'set')
-	{
-		$errors = [];
+	public function set_props( $props, $context = 'set' ) {
+		$errors = array();
 
 		foreach ( $props as $prop => $value ) {
 			try {
@@ -117,7 +116,7 @@ abstract class Base_Data {
 
 	public function apply_changes() {
 		$this->data    = array_replace_recursive( $this->data, $this->changes );
-		$this->changes = [];
+		$this->changes = array();
 	}
 
 	protected function get_prop( $prop, $context = 'view' ) {
@@ -129,26 +128,24 @@ abstract class Base_Data {
 		return $value;
 	}
 
-	public function read_metadata($id)
-	{
-		$metadata = [];
-		foreach ($this->meta_fields as $field => $args) {
-			$metadata[$field] = get_metadata($this->meta_type, $id, $args['key'], $args['unique']);
+	public function read_metadata( $id ) {
+		$metadata = array();
+		foreach ( $this->meta_fields as $field => $args ) {
+			$metadata[ $field ] = get_metadata( $this->meta_type, $id, $args['key'], $args['unique'] );
 		}
 		return $metadata;
 	}
 
-	public function update_metadata($data)
-	{
-		foreach ($this->meta_fields as $field => $args) {
-			if (array_key_exists($field, $data)) {
-				if ($args['unique']) {
-					update_metadata($this->meta_type, $this->get_id(), $args['key'], $data[$field], '');
+	public function update_metadata( $data ) {
+		foreach ( $this->meta_fields as $field => $args ) {
+			if ( array_key_exists( $field, $data ) ) {
+				if ( $args['unique'] ) {
+					update_metadata( $this->meta_type, $this->get_id(), $args['key'], $data[ $field ], '' );
 				} else {
-					delete_metadata($this->meta_type, $this->get_id(), $args['key'], '');
-					if (is_array($data[$field])) {
-						foreach ($data[$field] as $val) {
-							add_metadata($this->meta_type, $this->get_id(), $args['key'], $val, false);
+					delete_metadata( $this->meta_type, $this->get_id(), $args['key'], '' );
+					if ( is_array( $data[ $field ] ) ) {
+						foreach ( $data[ $field ] as $val ) {
+							add_metadata( $this->meta_type, $this->get_id(), $args['key'], $val, false );
 						}
 					}
 				}
@@ -165,11 +162,11 @@ abstract class Base_Data {
 	public function clear_caches() {
 	}
 
-	public function pre_get_filter($data){
+	public function pre_get_filter( $data ) {
 		return $data;
 	}
 
-	public function pre_save_filter($data){
+	public function pre_save_filter( $data ) {
 		return $data;
 	}
 }

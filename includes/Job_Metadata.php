@@ -25,8 +25,8 @@ class Job_Metadata {
 	}
 
 	public function display() {
-		$title = sprintf( '%s | %s', $this->job->get_name(), get_bloginfo( 'sitename' ) );
-		$url = loxo_get_new_job_url( $this->job->get_job_id(), $this->job );
+		$title       = sprintf( '%s | %s', $this->job->get_name(), get_bloginfo( 'sitename' ) );
+		$url         = loxo_get_new_job_url( $this->job->get_job_id(), $this->job );
 		$description = $this->get_job_meta_description();
 
 		$schema = $this->get_job_schema_data();
@@ -45,17 +45,17 @@ class Job_Metadata {
 	<meta property="og:description" content="<?php echo $description; ?>" />
 	<meta property="og:url" content="<?php echo $url; ?>" />
 	<meta property="og:site_name" content="<?php echo get_bloginfo( 'sitename' ); ?>" />
-<?php if ( $this->job->get_date_updated() ) : ?>
+		<?php if ( $this->job->get_date_updated() ) : ?>
 	<meta property="article:modified_time" content="<?php echo gmdate( DATE_W3C, strtotime( $this->job->get_date_updated() ) ); ?>" />
-<?php endif; ?>
-<?php if ( ! is_wp_error( $schema ) ) : ?>
+		<?php endif; ?>
+		<?php if ( ! is_wp_error( $schema ) ) : ?>
 	<script type="application/ld+json">
-		<?php echo json_encode( $schema ); ?>
+			<?php echo json_encode( $schema ); ?>
 
 	</script>
 	<!-- / Loxo plugin. -->
-<?php endif; ?>
-<?php
+		<?php endif; ?>
+		<?php
 	}
 
 	private function get_job_meta_description() {
@@ -87,40 +87,40 @@ class Job_Metadata {
 		$employment_type = 'FULL_TIME';
 		if ( $this->job->get_type() ) {
 			if ( 'Contract' === $this->job->get_type() ) {
-				$employment_type = "CONTRACTOR";
+				$employment_type = 'CONTRACTOR';
 			}
 		}
 
 		$schema = array(
-			"@context"    => "https://schema.org/",
-			"@type"       => "JobPosting",
-			"title"       => $this->job->get_name(),
-			"description" => $this->job->get_description(),
-			"identifier"  => array(
-				"@type" => "PropertyValue",
-				"name"  => get_option( 'loxo_hiring_company_name', get_bloginfo( 'sitename') ),
-				"value" => $this->job->get_job_id()
+			'@context'           => 'https://schema.org/',
+			'@type'              => 'JobPosting',
+			'title'              => $this->job->get_name(),
+			'description'        => $this->job->get_description(),
+			'identifier'         => array(
+				'@type' => 'PropertyValue',
+				'name'  => get_option( 'loxo_hiring_company_name', get_bloginfo( 'sitename' ) ),
+				'value' => $this->job->get_job_id(),
 			),
-			"datePosted"         => $date_posted,
-			"validThrough"       => $valid_through,
-			"employmentType"     => $employment_type,
-			"hiringOrganization" => array(
-				"@type"  => "Organization",
-				"name"   => get_option( 'loxo_hiring_company_name', get_bloginfo( 'sitename') ),
-				"sameAs" => get_option( 'loxo_hiring_company_url', home_url( '/') ),
-				"logo"   => get_option( 'loxo_hiring_company_logo' ),
+			'datePosted'         => $date_posted,
+			'validThrough'       => $valid_through,
+			'employmentType'     => $employment_type,
+			'hiringOrganization' => array(
+				'@type'  => 'Organization',
+				'name'   => get_option( 'loxo_hiring_company_name', get_bloginfo( 'sitename' ) ),
+				'sameAs' => get_option( 'loxo_hiring_company_url', home_url( '/' ) ),
+				'logo'   => get_option( 'loxo_hiring_company_logo' ),
 			),
-			"jobLocation" => array(
-				"@type"   => "Place",
-				"address" => array(
-					"@type"           => "PostalAddress",
-					"streetAddress"   => "",
-					"addressLocality" => "",
-					"addressRegion"   => "",
-					"postalCode"      => "",
-					"addressCountry"  => "US"
-				)
-			)
+			'jobLocation'        => array(
+				'@type'   => 'Place',
+				'address' => array(
+					'@type'           => 'PostalAddress',
+					'streetAddress'   => '',
+					'addressLocality' => '',
+					'addressRegion'   => '',
+					'postalCode'      => '',
+					'addressCountry'  => 'US',
+				),
+			),
 		);
 
 		// streetAddress.
@@ -153,17 +153,17 @@ class Job_Metadata {
 		}
 
 		// Add salary to schema.
-		# $this->job->set_salary( '20,500 - 50,000' );
+		// $this->job->set_salary( '20,500 - 50,000' );
 		$salary_data = loxo_get_job_salary_data( $this->job );
 		if ( $salary_data ) {
 			$schema['baseSalary'] = array(
-				"@type"    => "MonetaryAmount",
-				"currency" => "USD",
-				"value" => array(
-					"@type"    => "QuantitativeValue",
-					"value"    => $salary_data['value'],
-					"unitText" => $salary_data['unit']
-				)
+				'@type'    => 'MonetaryAmount',
+				'currency' => 'USD',
+				'value'    => array(
+					'@type'    => 'QuantitativeValue',
+					'value'    => $salary_data['value'],
+					'unitText' => $salary_data['unit'],
+				),
 			);
 
 			if ( ! empty( $salary_data['min'] ) ) {
@@ -175,7 +175,7 @@ class Job_Metadata {
 			}
 		}
 
-		# Utils::d($schema);
+		// Utils::d($schema);
 
 		return $schema;
 	}

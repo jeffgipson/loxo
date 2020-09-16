@@ -49,10 +49,10 @@ class Frontend {
 			$listing_page = get_page( loxo_get_listing_page_id() );
 
 			add_rewrite_rule(
-		        '(' . $listing_page->post_name . ')/[^/]+\-([0-9]+)',
-		        'index.php?pagename=$matches[1]&loxo_job_id=$matches[2]',
-		        'top'
-		    );
+				'(' . $listing_page->post_name . ')/[^/]+\-([0-9]+)',
+				'index.php?pagename=$matches[1]&loxo_job_id=$matches[2]',
+				'top'
+			);
 		}
 	}
 
@@ -91,9 +91,9 @@ class Frontend {
 				__( 'Sorry, the job you are looking for does not exists.', 404 ),
 				sprintf( '%s - Error', get_bloginfo( 'sitename' ) ),
 				array(
-					'response' => 404,
-					'link_url' => get_permalink( loxo_get_listing_page_id() ),
-					'link_text' => __( 'View Active Jobs' )
+					'response'  => 404,
+					'link_url'  => get_permalink( loxo_get_listing_page_id() ),
+					'link_text' => __( 'View Active Jobs' ),
 				)
 			);
 		}
@@ -111,8 +111,8 @@ class Frontend {
 		}
 
 		// Disable All in One SEO Pack metadata.
-		#add_filter( 'aiosp_disable', '__return_true' );
-		#add_filter( 'aioseop_title', '__return_empty_string' );
+		// add_filter( 'aiosp_disable', '__return_true' );
+		// add_filter( 'aioseop_title', '__return_empty_string' );
 
 		// Remove default title tag
 		remove_action( 'wp_head', '_wp_render_title_tag', 1 );
@@ -146,40 +146,44 @@ class Frontend {
 		} else {
 			$total_jobs = $this->get_total_jobs_count();
 
-			$job_category_terms = get_terms( array(
-				'taxonomy' => 'loxo_job_cat'
-			) );
-			$job_categories = array(
+			$job_category_terms = get_terms(
 				array(
-					'name' => 'Any',
-					'value' => 'Any',
-					'count' => $total_jobs
+					'taxonomy' => 'loxo_job_cat',
 				)
+			);
+			$job_categories     = array(
+				array(
+					'name'  => 'Any',
+					'value' => 'Any',
+					'count' => $total_jobs,
+				),
 			);
 			foreach ( $job_category_terms as $job_category_term ) {
 				$job_categories[] = array(
-					'name' => $job_category_term->name,
+					'name'  => $job_category_term->name,
 					'value' => $job_category_term->name,
-					'count' => $job_category_term->count
+					'count' => $job_category_term->count,
 				);
 			}
 
-			$job_state_terms = get_terms( array(
-				'taxonomy' => 'loxo_job_state'
-			) );
-			$job_states = array(
+			$job_state_terms = get_terms(
 				array(
-					'name' => 'Any',
-					'value' => 'Any',
-					'count' => $total_jobs
+					'taxonomy' => 'loxo_job_state',
 				)
+			);
+			$job_states      = array(
+				array(
+					'name'  => 'Any',
+					'value' => 'Any',
+					'count' => $total_jobs,
+				),
 			);
 
 			foreach ( $job_state_terms as $job_state_term ) {
 				$job_states[] = array(
-					'name' => $job_state_term->name,
+					'name'  => $job_state_term->name,
 					'value' => $job_state_term->name,
-					'count' => $job_state_term->count
+					'count' => $job_state_term->count,
 				);
 			}
 
@@ -199,20 +203,20 @@ class Frontend {
 			$tax_query = array();
 
 			if ( 'Any' !== $selected_job_category ) {
-				$filtered = true;
+				$filtered    = true;
 				$tax_query[] = array(
 					'taxonomy' => 'loxo_job_cat',
-					'field' => 'name',
-					'terms' => $selected_job_category
+					'field'    => 'name',
+					'terms'    => $selected_job_category,
 				);
 			}
 
 			if ( 'Any' !== $selected_job_state ) {
-				$filtered = true;
+				$filtered    = true;
 				$tax_query[] = array(
 					'taxonomy' => 'loxo_job_state',
-					'field' => 'name',
-					'terms' => $selected_job_state
+					'field'    => 'name',
+					'terms'    => $selected_job_state,
 				);
 			}
 
@@ -226,13 +230,15 @@ class Frontend {
 			}
 			$paged = get_query_var( 'paged' ) ? get_query_var( 'paged' ) : 1;
 
-			$jobs_query = new \WP_Query( array(
-				'post_type' => 'loxo_job',
-				'post_status' => 'publish',
-				'posts_per_page' => $per_page,
-				'paged' => $paged,
-				'tax_query' => $tax_query
-			));
+			$jobs_query = new \WP_Query(
+				array(
+					'post_type'      => 'loxo_job',
+					'post_status'    => 'publish',
+					'posts_per_page' => $per_page,
+					'paged'          => $paged,
+					'tax_query'      => $tax_query,
+				)
+			);
 
 			$found_jobs = $jobs_query->found_posts;
 
@@ -257,12 +263,12 @@ class Frontend {
 		$count = wp_cache_get( 'loxo_jobs_count' );
 
 		if ( false === $count ) {
-			$count = $wpdb->get_var( 
-				$wpdb->prepare( 
+			$count = $wpdb->get_var(
+				$wpdb->prepare(
 					"SELECT COUNT( * ) FROM {$wpdb->posts} WHERE post_type = %s AND post_status = %s",
 					'loxo_job',
 					'publish'
-				) 
+				)
 			);
 			wp_cache_set( 'loxo_jobs_count', $count );
 		}
@@ -291,11 +297,11 @@ class Frontend {
 			array(
 				'name'  => sanitize_text_field( $_POST['name'] ),
 				'email' => sanitize_email( $_POST['email'] ),
-				'phone' => sanitize_text_field( $_POST['phone'] )
+				'phone' => sanitize_text_field( $_POST['phone'] ),
 			),
 			array(
 				'name' => sanitize_file_name( $_FILES['resume']['name'] ),
-				'file' => $_FILES['resume']['tmp_name']
+				'file' => $_FILES['resume']['tmp_name'],
 			)
 		);
 
@@ -308,7 +314,7 @@ class Frontend {
 				)
 			);
 		} else {
-			wp_redirect( add_query_arg( 'applied', true , $_POST['_wp_http_referer']  ) );
+			wp_redirect( add_query_arg( 'applied', true, $_POST['_wp_http_referer'] ) );
 		}
 		exit;
 	}
@@ -318,7 +324,7 @@ class Frontend {
 	 */
 	public function single_job_metadata() {
 		$job_id = (int) sanitize_text_field( get_query_var( 'loxo_job_id' ) );
-		$job = new \Loxo\Job\Data( 'loxo-job-' . $job_id );
+		$job    = new \Loxo\Job\Data( 'loxo-job-' . $job_id );
 
 		$metadata = new Job_Metadata( $job );
 		$metadata->display();
@@ -328,18 +334,18 @@ class Frontend {
 	 * Remove yoast seo metadata completely from single job page.
 	 */
 	private function remove_wpseo_metadata() {
-		if ( version_compare( WPSEO_VERSION, '14.0', '>') ) {
+		if ( version_compare( WPSEO_VERSION, '14.0', '>' ) ) {
 			$front_end = YoastSEO()->classes->get( \Yoast\WP\SEO\Integrations\Front_End_Integration::class );
-			remove_action( 'wpseo_head', [ $front_end, 'present_head' ], -9999 );
+			remove_action( 'wpseo_head', array( $front_end, 'present_head' ), -9999 );
 		} else {
 			global $wpseo_front;
 
 			if ( isset( $wpseo_front ) ) {
-				remove_action( 'wp_head',array( $wpseo_front,'head' ), 1 );
+				remove_action( 'wp_head', array( $wpseo_front, 'head' ), 1 );
 
-			} else if ( class_exists( 'WPSEO_Frontend' ) ) {
+			} elseif ( class_exists( 'WPSEO_Frontend' ) ) {
 				$wpseo_frontend = WPSEO_Frontend::get_instance();
-				remove_action( 'wp_head',array( $wpseo_frontend, 'head' ), 1 );
+				remove_action( 'wp_head', array( $wpseo_frontend, 'head' ), 1 );
 			}
 		}
 	}
@@ -348,8 +354,8 @@ class Frontend {
 	 * Whitelist new public query var.
 	 */
 	public function job_id_query_vars( $query_vars ) {
-	    $query_vars[] = 'loxo_job_id';
-	    return $query_vars;
+		$query_vars[] = 'loxo_job_id';
+		return $query_vars;
 	}
 
 	/**

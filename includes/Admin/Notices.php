@@ -27,7 +27,7 @@ class Notices {
 	public function admin_notices() {
 		$screen = get_current_screen();
 
-		$errors = array();
+		$errors   = array();
 		$messages = array();
 
 		$agency_key   = get_option( 'loxo_agency_key' );
@@ -35,13 +35,13 @@ class Notices {
 		$api_password = get_option( 'loxo_api_password' );
 
 		if ( ! $agency_key || ! $api_username || ! $api_username ) {
-			$errors[] = sprintf( 
+			$errors[] = sprintf(
 				__( 'Loxo Error: Missing api credentials. Please update your loxo <a href="%s">API Settings</a>', 'loxo' ),
 				admin_url( 'edit.php?post_type=loxo_job&page=loxo-settings' )
 			);
 		} elseif ( get_option( 'loxo_api_credentials_error' ) ) {
-			$errors[] = sprintf( 
-				'Loxo Error: %1$s Please check & update your loxo <a href="%2$s">API Settings</a>', 
+			$errors[] = sprintf(
+				'Loxo Error: %1$s Please check & update your loxo <a href="%2$s">API Settings</a>',
 				get_option( 'loxo_api_credentials_error' ),
 				admin_url( 'edit.php?post_type=loxo_job&page=loxo-settings' )
 			);
