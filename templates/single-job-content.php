@@ -23,15 +23,10 @@ echo '<div class="loxo-single-job">';
 	echo '</h1>';
 
 	echo '<dl class="job-meta">';
-		if ( ! empty( $local_job->get_salary() ) ) {
+		if ( loxo_get_job_salary( $local_job ) ) {
 			echo '<dt class="job-salary">' . __( 'Compensation', 'loxo' ) . '</dt>';
-			echo '<dd class="job-salary">' . loxo_salary( $local_job->get_salary() ) . '</dd>';
+			echo '<dd class="job-salary">' . loxo_get_job_salary( $local_job ) . '</dd>';
 		}
-
-		/*
-		echo '<dt class="job-type">' . __( 'Type', 'loxo' ) . '</dt>';
-		echo '<dd class="job-type">' . $local_job->get_type() . '</dd>';
-		*/
 
 		$locations = array();
 		if ( ! empty( $local_job->get_city() ) ) {
@@ -63,22 +58,22 @@ echo '<div class="loxo-single-job">';
 				<?php
 					printf(
 						'<a href="http://www.facebook.com/sharer.php?u=%s" title="%s"><i class="fa fa-facebook"></i></a>',
-						loxo_get_job_url( $local_job->get_job_id(), $local_job->get_name() ),
+						loxo_get_new_job_url( $local_job->get_job_id(), $local_job ),
 						__( 'Share on Facebook', 'loxo' )
 					);
 					printf(
 						'<a href="https://twitter.com/share?url=%s" title="%s"><i class="fa fa-twitter"></i></a>',
-						loxo_get_job_url( $local_job->get_job_id(), $local_job->get_name() ),
+						loxo_get_new_job_url( $local_job->get_job_id(), $local_job ),
 						__( 'Share on Twitter', 'loxo' )
 					);
 					printf(
 						'<a href="http://www.linkedin.com/shareArticle?mini=true&url=%s" title="%s"><i class="fa fa-linkedin"></i></a>',
-						loxo_get_job_url( $local_job->get_job_id(), $local_job->get_name() ),
+						loxo_get_new_job_url( $local_job->get_job_id(), $local_job ),
 						__( 'Share on LinkedIn', 'loxo' )
 					);
 					printf(
 						'<a href="mailto:?subject=I wanted you to check this job&amp;body=Check out this job %s" title="%s"><i class="fa fa-envelope"></i></a>',
-						loxo_get_job_url( $local_job->get_job_id(), $local_job->get_name() ),
+						loxo_get_new_job_url( $local_job->get_job_id(), $local_job ),
 						__( 'Share by Email', 'loxo' )
 					);
 				?>

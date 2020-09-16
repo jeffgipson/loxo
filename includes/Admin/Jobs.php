@@ -85,6 +85,15 @@ class Jobs {
             case 'salary':
                 if ( $job->get_salary() ) {
                     echo loxo_salary( $job->get_salary() );
+
+                } elseif ( loxo_get_job_salary( $job ) ) {
+                    echo loxo_get_job_salary( $job );
+                    echo '<br/>';
+                    printf( 
+                        '<small><abbr title="%1$s">%2$s</abbr></small>', 
+                        esc_attr__( 'This salary is automatically parsed from description' ),
+                        esc_attr__( 'Auto Parsed' )
+                    );
                 }
                 break;
 
@@ -153,11 +162,12 @@ class Jobs {
                 );
                 $actions['view'] = sprintf( 
                     '<a href="%1$s">%2$s</a>',
-                    esc_url( loxo_get_job_url( $job->get_job_id(), $job->get_name() ) ),
+                    esc_url( loxo_get_new_job_url( $job->get_job_id(), $job ) ),
                     esc_html( __( 'View', 'loxo' ) )
                 );
             }
         }
+
         return $actions;
     }
 }

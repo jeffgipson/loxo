@@ -26,7 +26,7 @@ class Job_Metadata {
 
 	public function display() {
 		$title = sprintf( '%s | %s', $this->job->get_name(), get_bloginfo( 'sitename' ) );
-		$url = loxo_get_job_url( $this->job->get_job_id(), $this->job->get_name() );
+		$url = loxo_get_new_job_url( $this->job->get_job_id(), $this->job );
 		$description = $this->get_job_meta_description();
 
 		$schema = $this->get_job_schema_data();
@@ -153,21 +153,25 @@ class Job_Metadata {
 		}
 
 		// Add salary to schema.
-		if ( ! empty( $this->job->get_salary() ) ) {
-			$salary = preg_replace( '/[^0-9\.]/i', '', trim( $this->job->get_salary() ) );
+		# $this->job->set_salary( '20,500 - 50,000' );
+		$salary_data = loxo_get_job_salary_data( $this->job );
+		if ( $salary_data ) {
+			$schema['baseSalary'] = array(
+				"@type"    => "MonetaryAmount",
+				"currency" => "USD",
+				"value" => array(
+					"@type"    => "QuantitativeValue",
+					"value"    => $salary_data['value'],
+					"unitText" => $salary_data['unit']
+				)
+			);
 
-			if ( ! empty( $salary ) ) {
-				$unit_text = loxo_get_salary_unit( $this->job->get_salary() );
+			if ( ! empty( $salary_data['min'] ) ) {
+				$schema['baseSalary']['minValue'] = $salary_data['min'];
+			}
 
-				$schema['baseSalary'] = array(
-					"@type"    => "MonetaryAmount",
-					"currency" => "USD",
-					"value" => array(
-						"@type"    => "QuantitativeValue",
-						"value"    => number_format( $salary, 2, '.', '' ),
-						"unitText" => $unit_text
-					)
-				);
+			if ( ! empty( $salary_data['max'] ) ) {
+				$schema['baseSalary']['maxValue'] = $salary_data['max'];
 			}
 		}
 

@@ -1,7 +1,102 @@
 <?php
 function loxo_salary( $salary ) {
 	$_salary = preg_replace( '/[^0-9\.]/i', '', trim( $salary ) );
+	if ( empty( $_salary ) ) {
+		return $salary;
+	}
+
 	return '$' . number_format( $_salary, 0, '.', ',' );
+}
+
+add_action( 'template_redirect2', function(){
+	$job = new \Loxo\Job\Data( 'loxo-job-469477' );
+	#$job->set_salary( '$2000.00 - #5000.0 per week' );
+	\Loxo\Utils::d( loxo_get_job_salary_data( $job ) );
+	exit;
+});
+
+function loxo_get_job_salary( $job ) {
+	$salary_data = loxo_get_job_salary_data( $job );
+	if ( $salary_data ) {
+		if ( ! empty( $salary_data['min'] ) && ! empty( $salary_data['max'] ) ) {
+			return '$' . number_format( $salary_data['min'], 0, '.', ',' ) . ' - ' . '$' . number_format( $salary_data['max'], 0, '.', ',' );
+		} elseif ( ! empty( $salary_data['value'] ) ) {
+			return '$' . number_format( $salary_data['value'], 0, '.', ',' );
+		}
+	}
+
+	return $job->get_salary();
+}
+
+/**
+ * Get job salary data.
+ * 
+ * @param \Loxo\Job $job Loxo job object.
+ */
+function loxo_get_job_salary_data( $job ) {
+	$data = array(
+		'value' => '',
+		'unit' => 'YEAR',
+		'min' => '',
+		'max' => ''
+	);
+
+	if ( $job->get_salary() ) {
+
+		$salary_string = trim( $job->get_salary() );
+
+		$salary = preg_replace( '/[^0-9\.]/i', '', $salary_string );
+
+		// string - DOE etc.
+		if ( empty( $salary ) ) {
+			return false;
+		}
+
+		$data['unit'] = loxo_get_salary_unit( $salary_string );
+
+		$range = loxo_get_salary_range( $salary_string );
+
+		if ( $range ) {
+			$data['min'] = $range['min'];
+			$data['max'] = $range['max'];
+			$data['value'] = $range['max'];
+		} else {
+			$salary = preg_replace( '/[^0-9\.]/i', '', $salary_string );
+			// string - DOE etc.
+			if ( empty( $salary ) ) {
+				$data['value'] = $salary_string;
+			} else {
+				$data['value'] = number_format( $salary, 0, '.', '' );
+			}
+		}
+
+		return $data;
+	}
+
+	if ( 'yes' === get_option( 'loxo_enable_salary_intelligence' ) ) {
+
+		if ( $job->get_description() ) {
+			$plain_desc = strtolower( strip_tags( $job->get_description() ) );
+
+			if ( preg_match( '/min compensation: (\d+)/i', $plain_desc, $match ) ) {
+				$data['min'] = $match['1'];
+			}
+
+			if ( preg_match( '/max compensation: (\d+)/i', $plain_desc, $match ) ) {
+				$data['max'] = $match['1'];
+			}
+
+			if ( empty( $data['value'] ) ) {
+				$data['value'] = $data['max'];
+			}
+
+			if ( ! empty( array_filter( $data ) ) ) {
+				return $data;
+			}
+		}
+
+		return false;
+	}
 }
 
 function loxo_get_salary_unit( $salary ) {
@@ -22,6 +117,28 @@ function loxo_get_salary_unit( $salary ) {
 	}
 
 	return $unit_text;
+}
+
+function loxo_get_salary_range( $salary ) {
+	if ( false !== strpos( strtolower( $salary ), 'per' ) ) {
+		$salary = substr( $salary, 0, strpos( strtolower( $salary ), 'per' ) );
+	}
+
+	if ( false === strpos( $salary, '-' ) ) {
+		return false;
+	}
+
+	$salary = preg_replace( '/[^0-9\.\-]/i', '', trim( $salary ) );
+	$parts = explode( '-', $salary );
+
+	if ( count( $parts ) !== 2 ) {
+		return false;
+	}
+
+	return array(
+		'min' => number_format( $parts[0], 0, '.', '' ),
+		'max' => number_format( $parts[1], 0, '.', '' )
+	);
 }
 
 function loxo_calculate_job_expiration( $date_posted, $format = 'Y-m-d' ) {
@@ -50,6 +167,34 @@ function loxo_get_sitemap_url() {
 
 function loxo_get_sitemap_name() {
 	return 'loxo-jobs';
+}
+
+
+function loxo_get_new_job_url( $job_id, $job = '' ) {
+	if ( loxo_get_listing_page_id() ) {
+		if ( ! $job ) {
+			$job = new \Loxo\Job\Data( 'loxo-job-' . $job_id );
+		}
+
+		if ( ! $job->get_id() ) {
+			return false;
+		}
+
+		$job_title = $job->get_name();
+		$job_slug = sanitize_title( $job_title );
+
+		if ( $job->get_city() ) {
+			$job_slug .= '-in-' . sanitize_title_with_dashes( $job->get_city() );
+		}
+
+		$job_slug .= '-' . $job_id;
+
+		$url = untrailingslashit( get_permalink( loxo_get_listing_page_id() ) ) . '/' . $job_slug . '/';
+	} else {
+		$url = home_url( '?loxo_job_id=' . $job_id );
+	}
+
+	return $url;
 }
 
 function loxo_get_job_url( $job_id, $job_title = '' ) {

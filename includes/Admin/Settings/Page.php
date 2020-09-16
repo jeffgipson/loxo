@@ -205,6 +205,14 @@ class Page {
 					'desc'				=> __( 'If job expiration custom field comes empty, a validThrough date will be calculated in conjunction with job publication date.', 'loxo' ),
 					'type'              => 'text',
                     'sanitize_callback' => 'sanitize_text_field'
+                ),
+				array(
+                    'id'                => 'loxo_enable_salary_intelligence',
+                    'name'              => 'loxo_enable_salary_intelligence',
+                    'label'             => __( 'Autoparse Salary?', 'loxo' ),
+					'desc'				=> __( 'If enabled, salary will be parsed from description if salary field returns empty. Plugin will look for <code>Min Compensation</code> & <code>Max Compensation</code> string and look for salaries.', 'loxo' ),
+                    'type'              => 'checkbox',
+                    'sanitize_callback' => 'sanitize_text_field'
                 )
 			),
 			'synchronizer' => array(
