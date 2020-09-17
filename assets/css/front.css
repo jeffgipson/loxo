@@ -126,10 +126,13 @@
 	position: absolute;
 }
 .loxo-jobs .job-title{
+	flex: 1 1 0;
 	margin: 0;
 	color: #0264a7;
 	font-size: 22px;
 	order: 1;
+	line-height: 1.2;
+	margin: 5px 0;
 }
 .loxo-jobs .job-id,
 .loxo-jobs .job-data,

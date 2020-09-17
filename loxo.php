@@ -3,7 +3,7 @@
  * Plugin Name: Loxo
  * Plugin URI: http://linkpas.com/
  * Description: Display jobs from your loxo.co saas application. job listing, job filter, single job details, sitemap, job schema
- * Version: 1.1.3
+ * Version: 1.1.4
  * Author: Shazzad Hossain Khan
  * Author URI: https://shazzad.me
  * Requires at least: 5.0
