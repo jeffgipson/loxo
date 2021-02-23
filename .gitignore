@@ -1,0 +1,37 @@
+# OS generated files #
+######################
+**.DS_Store*
+ehthumbs.db
+Icon?
+Thumbs.db
+._*
+
+# Composer #
+##########
+vendor/
+!assets/js/vendor/
+wpcs/
+composer.lock
+
+# NPM #
+##########
+node_modules/
+.npm-debug.log
+tmp
+
+# Compiled Files and Build Dirs #
+##########
+/README.html
+/build/
+assets/compiled/
+
+# Compiled Files and Build Dirs Exceptions#
+##########
+product-templates/
+
+# To do list #
+##########
+TODO
+
+# Editor Config #
+*.code-workspace

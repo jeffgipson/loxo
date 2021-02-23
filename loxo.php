@@ -3,7 +3,7 @@
  * Plugin Name: Loxo
  * Plugin URI: https://www.ramaxsearch.com
  * Description: Display jobs from your loxo.co saas application. job listing, job filter, single job details, sitemap, job schema
- * Version: 1.0.3
+ * Version: 1.0.4
  * Author: Loxo
  * Author URI: https://shazzad.me
  * Requires at least: 4.4

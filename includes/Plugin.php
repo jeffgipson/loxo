@@ -30,7 +30,7 @@ final class Plugin {
 	 *
 	 * @var string
 	 */
-	public $version = '1.0.3';
+	public $version = '1.0.4';
 
 	/**
 	 * Singleton The reference the *Singleton* instance of this class.
@@ -95,6 +95,7 @@ final class Plugin {
 		}
 
 		new Frontend();
+		new Latest_Jobs_Shortcode();
 
 		if ( 'yes' === get_option( 'loxo_enable_sitemap' ) ) {
 			new Sitemap();

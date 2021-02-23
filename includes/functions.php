@@ -369,6 +369,7 @@ function loxo_api_get_jobs( $page = 1, $per_page = 20, $cache = 60 ) {
 	$params = array(
 		'page'     => $page,
 		'per_page' => $per_page,
+		'published_at_sort' => 'desc'
 	);
 
 	if ( loxo_api_get_active_job_status_id() ) {
